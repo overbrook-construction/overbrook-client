@@ -31204,14 +31204,14 @@
 	    }
 
 	    vm.runSingleData = function(id) {
-	      console.log('RUN SINLE DATA HIT FROM MAP CTRL WITH : ', id)
+	      console.log('MAKING CHANGES TO CLIENT SERVER LUCY AND DAVID SITTIN IN A TREE')
 	      vm.singleHouseDataLoader(id);
 	    }
 
 	    vm.singleHouseDataLoader = function(id){
 	      var singleHomeData = {};
 	      for (var key in data) {
-	        console.log("SINGLE HOUSE FUNCTION CALLED WITH : ", id);
+	        console.log("MAKING CHANGES TO ONLY THE CLIENT SERVER !!!!!");
 	        var obj = data[key]
 	        if (data[key]._id == id) {
 	          // console.log('THIS IS THE MATCHING OBJECT', obj);
