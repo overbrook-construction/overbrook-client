@@ -31373,7 +31373,7 @@
 
 	
 
-	// exports.baseUrl = 'https://overbrook-server.herokuapp.com'
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 	exports.baseUrl = 'http://localhost:3000'
 
 
@@ -33455,19 +33455,14 @@
 
 	'use strict';
 
-	// BRINGING IN THE SERVICEva
 	var constants = __webpack_require__(6);
 	__webpack_require__(22);
 
 	angular.module('AdminModule', [])
 	  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
 
-	    // console.log('AUTH SERVICE SHOULD BE : ', AuthService);
-
 	    var vm = this;
-
 	    var token;
-
 	    var adminRoute  = constants.baseUrl + '/addHomes';
 	    var addUser = constants.baseUrl + '/addUser';
 	    var getUser  = constants.baseUrl + '/userLogin';
@@ -33479,7 +33474,6 @@
 	      var submitForm = document.getElementsByName(formName)[0];
 	      submitForm.reset();
 	    }
-
 
 	    vm.clearToken = function() {
 	      $window.localStorage.token = null;

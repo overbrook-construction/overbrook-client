@@ -2,7 +2,7 @@
 <section class="adminMasterSection">
 
   <nav-directive></nav-directive>
-  
+
 
 <section ng-show="adminCtrl.admin == false" ng-init="adminCtrl.clearToken()">
   <form class="adminLogin" name="loginForm" ng-submit="adminCtrl.login(admin)">
@@ -59,7 +59,11 @@
       <span>elementary: </span><input type="text" ng-model="house.elementary">
       <span>ms: </span><input type="text" ng-model="house.ms">
       <span>hs: </span><input type="text" ng-model="house.hs">
-      <span>status: </span><input type="text" ng-model="house.status">
+      <span>Status :</span> <select name="name" ng-model="house.status" required>
+        <option value="Complete">Complete</option>
+        <option value="Future">Future</option>
+        <option value="Constructing">Constructing</option>
+      </select>
       <button type="submit" ng-click="adminCtrl.updateHouse(house)">save changes</button>
       <button type="reset" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
     </form>

@@ -1,18 +1,13 @@
 'use strict';
 
-// BRINGING IN THE SERVICEva
 var constants = require(__dirname + '/../../constants');
 require('./auth_service');
 
 angular.module('AdminModule', [])
   .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
 
-    // console.log('AUTH SERVICE SHOULD BE : ', AuthService);
-
     var vm = this;
-
     var token;
-
     var adminRoute  = constants.baseUrl + '/addHomes';
     var addUser = constants.baseUrl + '/addUser';
     var getUser  = constants.baseUrl + '/userLogin';
@@ -24,7 +19,6 @@ angular.module('AdminModule', [])
       var submitForm = document.getElementsByName(formName)[0];
       submitForm.reset();
     }
-
 
     vm.clearToken = function() {
       $window.localStorage.token = null;
