@@ -2,8 +2,12 @@
 
 // BRINGING IN THE SERVICEva
 var constants = require(__dirname + '/../../constants');
+require('./auth_service');
+
 angular.module('AdminModule', [])
   .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
+
+    // console.log('AUTH SERVICE SHOULD BE : ', AuthService);
 
     var vm = this;
 
@@ -15,6 +19,12 @@ angular.module('AdminModule', [])
     var picRoute = constants.baseUrl + '/addPics';
 
     vm.admin = false;
+
+    vm.resetForm = function(formName){
+      var submitForm = document.getElementsByName(formName)[0];
+      submitForm.reset();
+    }
+
 
     vm.clearToken = function() {
       $window.localStorage.token = null;
@@ -42,11 +52,14 @@ angular.module('AdminModule', [])
 
     vm.submitHouse = function(newHouse) {
       $http.post(adminRoute, newHouse, {
-        // headers: {
-        //   token: 'blah'
-        // }
+        headers: {
+          token: token
+        }
       })
       .success(function(data, status, headers, config) {
+        vm.getHouseData();
+        vm.resetForm('submitHouseForm');
+
         console.log('ADDED HOUSE FROM ADMIN CTRL');
       })
       .error(function(data, status, headers, config) {
@@ -55,8 +68,11 @@ angular.module('AdminModule', [])
     }
 
     vm.getHouseData = function() {
-      console.log('GET REQUEST HAS BEEN RECEIVED');
-      $http.get(adminRoute)
+      $http.get(adminRoute, {
+        headers: {
+          token: token
+        }
+      })
       .success(function(data, status, headers, config) {
         console.log('DATA FROM GET IS : ', data);
         // allHouses.push(data);
@@ -70,25 +86,34 @@ angular.module('AdminModule', [])
     vm.updateHouse = function(house) {
       vm.updateHouse.rendered = null;
       $http.put(adminRoute + '/' + house._id, house, {
-
+        headers: {
+          token: token
+        }
       }).success(function(data, status, headers, config) {
-        console.log('DATA FROM GET IS : ', data);
+        vm.getHouseData();
+        vm.resetForm('updateHouseForm');
       })
       .error(function(data, status, headers, config) {
               console.log('CANNONT GET HOUSES');
       })
     }
 
-    vm.deleteHouse = function(house, token) {
-      console.log('DELETE HOUSE HIT WITH : ', house);
-      $http.delete(adminRoute + '/' + house, {
+    vm.deleteHouse = function(house, address) {
+      var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
+      if (answer) {
 
+      $http.delete(adminRoute + '/' + house, {
+        headers: {
+          token: token
+        }
       }).success(function(data, status, headers, config) {
+        vm.getHouseData();
         console.log(house + ' HAS BEEN DELETED');
       })
       .error(function(data, status, headers, config) {
         console.log('CANNOT DELETE HOUSES');
       })
     }
+  }
 
   }])

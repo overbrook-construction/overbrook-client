@@ -57,8 +57,8 @@
 	__webpack_require__(19);
 	__webpack_require__(20)
 	__webpack_require__(21);
-	__webpack_require__(22);
-	__webpack_require__(25);
+	__webpack_require__(23);
+	__webpack_require__(26);
 
 
 /***/ },
@@ -33484,8 +33484,12 @@
 
 	// BRINGING IN THE SERVICEva
 	var constants = __webpack_require__(6);
+	__webpack_require__(22);
+
 	angular.module('AdminModule', [])
 	  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
+
+	    // console.log('AUTH SERVICE SHOULD BE : ', AuthService);
 
 	    var vm = this;
 
@@ -33497,6 +33501,12 @@
 	    var picRoute = constants.baseUrl + '/addPics';
 
 	    vm.admin = false;
+
+	    vm.resetForm = function(formName){
+	      var submitForm = document.getElementsByName(formName)[0];
+	      submitForm.reset();
+	    }
+
 
 	    vm.clearToken = function() {
 	      $window.localStorage.token = null;
@@ -33524,11 +33534,14 @@
 
 	    vm.submitHouse = function(newHouse) {
 	      $http.post(adminRoute, newHouse, {
-	        // headers: {
-	        //   token: 'blah'
-	        // }
+	        headers: {
+	          token: token
+	        }
 	      })
 	      .success(function(data, status, headers, config) {
+	        vm.getHouseData();
+	        vm.resetForm('submitHouseForm');
+
 	        console.log('ADDED HOUSE FROM ADMIN CTRL');
 	      })
 	      .error(function(data, status, headers, config) {
@@ -33537,8 +33550,11 @@
 	    }
 
 	    vm.getHouseData = function() {
-	      console.log('GET REQUEST HAS BEEN RECEIVED');
-	      $http.get(adminRoute)
+	      $http.get(adminRoute, {
+	        headers: {
+	          token: token
+	        }
+	      })
 	      .success(function(data, status, headers, config) {
 	        console.log('DATA FROM GET IS : ', data);
 	        // allHouses.push(data);
@@ -33552,26 +33568,35 @@
 	    vm.updateHouse = function(house) {
 	      vm.updateHouse.rendered = null;
 	      $http.put(adminRoute + '/' + house._id, house, {
-
+	        headers: {
+	          token: token
+	        }
 	      }).success(function(data, status, headers, config) {
-	        console.log('DATA FROM GET IS : ', data);
+	        vm.getHouseData();
+	        vm.resetForm('updateHouseForm');
 	      })
 	      .error(function(data, status, headers, config) {
 	              console.log('CANNONT GET HOUSES');
 	      })
 	    }
 
-	    vm.deleteHouse = function(house, token) {
-	      console.log('DELETE HOUSE HIT WITH : ', house);
-	      $http.delete(adminRoute + '/' + house, {
+	    vm.deleteHouse = function(house, address) {
+	      var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
+	      if (answer) {
 
+	      $http.delete(adminRoute + '/' + house, {
+	        headers: {
+	          token: token
+	        }
 	      }).success(function(data, status, headers, config) {
+	        vm.getHouseData();
 	        console.log(house + ' HAS BEEN DELETED');
 	      })
 	      .error(function(data, status, headers, config) {
 	        console.log('CANNOT DELETE HOUSES');
 	      })
 	    }
+	  }
 
 	  }])
 
@@ -33580,9 +33605,62 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var constants = __webpack_require__(6);
+
+	module.exports = function() {
+	  app.factory('AuthService', ['$http', '$window', function($http, $window) {
+	    var token;
+	    var url = constants.baseUrl;
+	    var auth = {
+	      // createUser(user, cb) {
+	      //   cb || function() {};
+	      //   console.log('USER COMING IN : ', user);
+	      //   $http.post(url + '/addUser', user)
+	      //     .then((res) => {
+	      //       token = $window.localStorage.token = res.data.token;
+	      //       cb(null, res)
+	      //     }, (err) => {
+	      //       cb(err)
+	      //     })
+	      // },
+	      getToken() {
+	        return token || $window.localStorage.token;
+	      }
+	    // signOut(cb) {
+	    //   // cb = cb || function() {}
+	    //   token = null;
+	    //   $window.localStorage.token = null;
+	    //   cb && cb();
+	    // },
+	    // signIn(user, cb) {
+	    //   console.log('AUTH SERVICE : SIGN IN HIT WITH : ', user);
+	    //   cb = cb || function() {};
+	    //   $http.get(url + '/signin', {
+	    //     headers: {
+	    //       authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+	    //     }})
+	    //   .then((res) => {
+	    //     // cb = cb || function() {};
+	    //     token = $window.localStorage.token = res.data.token;
+	    //     console.log('AUTH SERVICE : TOKEN GEN : ', token);
+	    //     cb(null, res);
+	    //   }, (err) => {
+	    //     cb(err);
+	    //   })
+	    // }
+	  }
+	    return auth;
+	  }])
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	angular.module('RouteModule', [__webpack_require__(23)])
+	angular.module('RouteModule', [__webpack_require__(24)])
 	  .config(['$routeProvider', function(route) {
 	    route
 	      .when('/home', {
@@ -33630,15 +33708,15 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(24);
+	__webpack_require__(25);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	/**
@@ -34676,7 +34754,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
