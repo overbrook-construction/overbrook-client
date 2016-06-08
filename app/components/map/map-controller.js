@@ -8,13 +8,6 @@ require(__dirname + '/../../ajax-service/data-service');
 angular.module('MapModule', ['AjaxService'])
   .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', function($http, $location, ajax, $controller, $window) {
 
-
-  //   vm.load = function() {
-  //   var sleep = document.createElement('script');
-  //   sleep.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBBv4Sc8DwDft9TdcwDmS9d01SBmrCJFXA';
-  //   document.body.appendChild(sleep);
-  // }
-
     var vm = this;
 
     vm.completeIcon = './media/complete-home.svg';
@@ -30,7 +23,6 @@ angular.module('MapModule', ['AjaxService'])
       zoom: 12
     });
   }
-  // setTimeout(vm.initMap(), 5000);
 
   vm.changeButtonColor = function(buttonClicked) {
     var count = 0;
@@ -68,26 +60,10 @@ angular.module('MapModule', ['AjaxService'])
       data = ajax.allHomeData;
     }
   }
-    // vm.getData = function() {
-    //   ajax.getData();
-    //   vm.houseData = ajax.allHomeData;
-    // }
 
     vm.clickedAddress = [];
     vm.geoArray = [];
     vm.clickedPics = [];
-
-
-
-
-//     var promiseArray = objectArray.map(function(value, index) {
-// return new Promise(geocoding stuff)
-// })
-
-// Promise.all(promiseArray)
-// .then(clearmarkers, drawmarkers)
-// .catch(handleErrorSomehow)
-
 
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
   var geoFunc = function(objectArray, iconValue) {
@@ -100,9 +76,6 @@ angular.module('MapModule', ['AjaxService'])
 
           geocoder.geocode({'address': value.address}, function(results, status) {
             if(status === google.maps.GeocoderStatus.OK) {
-              // console.log('RESULTS FROM NEW PROMISE : ', results[0].geometry.location);
-              // geoArray.push(results[0].geometry.location)
-              // console.log(results[0].geometry.location);
               resolve(results[0].geometry.location);
             }
 
@@ -120,7 +93,7 @@ angular.module('MapModule', ['AjaxService'])
   }
 
 
-    var contentFig = 'sam Gruse';
+    var contentFig;
     var homePic;
 
     // MAP FUNCTIONALITY
@@ -154,9 +127,11 @@ angular.module('MapModule', ['AjaxService'])
           (function(marker, infowindow) {
             marker.addListener('click', function() {
               if(infowindow) {
+                // infowindow.close();
                 closeInfo();
               }
               closeInfo();
+              infowindow.close();
               infowindow.open(map.googleMap, marker)
             })
           })(marker, infowindow);
@@ -184,7 +159,6 @@ angular.module('MapModule', ['AjaxService'])
         var obj = data[key];
         if(obj.status === clickedValue) {
           vm.clickedAddress.push(obj);
-          // vm.clickedPics.push(obj.pics[0]);
         }
       }
       geoFunc(vm.clickedAddress, iconValue, function(){});
