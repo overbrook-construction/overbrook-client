@@ -31152,6 +31152,30 @@
 	    var data;
 
 
+
+	    // BUTTON CLICKING FUNCTIONALITY ::
+
+	    vm.changeButtonColor = function(buttonClicked) {
+	      var count = 0;
+	      setColor(buttonClicked);
+	    }
+
+	    function setColor(buttonClicked){
+	      if (buttonClicked === 'Complete') {
+	        var buttonClicked;
+	        buttonClicked = 'completed';
+	      }
+	      var completeButton = document.getElementsByName('filterButton');
+	      for (var i = 0; i < completeButton.length; i++) {
+	        if (completeButton[i].className !== buttonClicked) {
+	          completeButton[i].className = 'grayButton';
+	        }
+	        if (completeButton[i].id == buttonClicked) {
+	          completeButton[i].className = buttonClicked;
+	        }
+	      }
+	    }
+
 	  vm.getData = function() {
 	    if ($window.localStorage){
 	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
@@ -31635,14 +31659,17 @@
 	    // else {
 
 	    // var singleHomeData = {};
+
+	    // FOR THE EDGE CASE !!! INSERT ANOTHER IF STATEMENT THAT CHECKS IF THE HOUSE WITH THAT ID IS UNDER CONSTRUCTION, IF IT IS THAN SET A FLAG TO ONLY LOAD A CERTAIN VIEW WITH CERTAIN DATA
+
 	    for (var key in data) {
 	      var obj = data[key]
 	      if (data[key]._id == useId) {
 	        this.singleHomeData.address = obj.address;
 	        this.singleHomeData.sqft = obj.sqft;
 	        this.singleHomeData.bedrooms = obj.bedrooms;
-	        this.singleHomeData.bathrooms = obj.bathrooms;
-	        this.singleHomeData.lotsize = obj.lotsize;
+	        this.singleHomeData.baths = obj.baths;
+	        this.singleHomeData.lotSize = obj.lotSize;
 	        this.singleHomeData.schooldistrict = obj.schooldistrict;
 	        this.singleHomeData.elementary = obj.elementary;
 	        this.singleHomeData.middle = obj.middle;

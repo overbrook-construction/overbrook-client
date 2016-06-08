@@ -302,6 +302,19 @@
   width: 30%;
   font-family: 'Lato', sans-serif; }
 
+.grayButton {
+  background-color: #CECCCC;
+  /* Green */
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 2.5vmin;
+  width: 30%;
+  font-family: 'Lato', sans-serif; }
+
 .current {
   background-color: #1C75BB;
   border: none;
