@@ -1,19 +1,18 @@
 'use strict';
 
-// BRINGING IN THE SERVICE
-
+// BRINGING IN THE SERVICEva
+var constants = require(__dirname + '/../../constants');
 angular.module('AdminModule', [])
   .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
 
     var vm = this;
 
     var token;
-    var adminRoute = 'https://overbrook-construction.herokuapp.com/addHomes';
-    var addUser = 'https://overbrook-construction.herokuapp.com/addUser';
 
-    var getUser = 'https://overbrook-construction.herokuapp.com/userLogin';
-
-    var picRoute = 'https://overbrook-construction.herokuapp.com/addPics';
+    var adminRoute  = constants.baseUrl + '/addHomes';
+    var addUser = constants.baseUrl + '/addUser';
+    var getUser  = constants.baseUrl + '/userLogin';
+    var picRoute = constants.baseUrl + '/addPics';
 
     vm.admin = false;
 

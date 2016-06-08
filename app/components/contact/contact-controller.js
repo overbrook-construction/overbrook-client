@@ -1,8 +1,10 @@
 'use strict';
 
+var constants = require(__dirname + '/../../constants');
+
 angular.module('ContactModule', [])
 .controller('contactController', ['$http', function($http) {
-  var emailRoute = 'https://overbrook-construction.herokuapp.com/email'
+  var emailRoute = constants.baseUrl + '/email'
 
 
   var emailForm = document.getElementsByName('emailForm')[0];

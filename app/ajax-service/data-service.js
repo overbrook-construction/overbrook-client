@@ -1,4 +1,5 @@
 'use strict';
+var constants = require(__dirname + '/../constants');
 
 var ajaxService = angular.module('AjaxService', []);
 
@@ -32,7 +33,7 @@ var ajaxService = angular.module('AjaxService', []);
 // RETRIEVING DATA FROM THE MLAB DATA BASE THIS IS THE NEW VERSION
 ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
 
-  var adminRoute = 'https://overbrook-construction.herokuapp.com/addHomes';
+  var adminRoute = constants.baseUrl + '/addHomes';
   // this.getHouseData = function() {
   //   console.log('GET REQUEST HAS BEEN RECEIVED');
   //   $http.get(adminRoute)

@@ -49,16 +49,16 @@
 	const angular = __webpack_require__(1);
 
 	__webpack_require__(3);
-	__webpack_require__(6);
 	__webpack_require__(7);
 	__webpack_require__(8);
-	__webpack_require__(4);
 	__webpack_require__(9);
-	__webpack_require__(18);
-	__webpack_require__(19)
-	__webpack_require__(20);
+	__webpack_require__(4);
+	__webpack_require__(10);
+	__webpack_require__(19);
+	__webpack_require__(20)
 	__webpack_require__(21);
-	__webpack_require__(24);
+	__webpack_require__(22);
+	__webpack_require__(25);
 
 
 /***/ },
@@ -31266,9 +31266,10 @@
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+	var constants = __webpack_require__(6);
 
 	var ajaxService = angular.module('AjaxService', []);
 
@@ -31302,7 +31303,7 @@
 	// RETRIEVING DATA FROM THE MLAB DATA BASE THIS IS THE NEW VERSION
 	ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
 
-	  var adminRoute = 'https://overbrook-construction.herokuapp.com/addHomes';
+	  var adminRoute = constants.baseUrl + '/addHomes';
 	  // this.getHouseData = function() {
 	  //   console.log('GET REQUEST HAS BEEN RECEIVED');
 	  //   $http.get(adminRoute)
@@ -31344,6 +31345,15 @@
 
 /***/ },
 /* 6 */
+/***/ function(module, exports) {
+
+	
+
+	exports.baseUrl = 'https://overbrook-server.herokuapp.com'
+
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31365,7 +31375,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31377,7 +31387,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31555,15 +31565,15 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	// require(__dirname + '/../../ajax-service/data-service');
-	__webpack_require__(10);
+	__webpack_require__(11);
 
-	var url = __webpack_require__(11);
+	var url = __webpack_require__(12);
 
 	__webpack_require__(4);
 
@@ -31663,7 +31673,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -31890,7 +31900,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -31916,8 +31926,8 @@
 
 	'use strict';
 
-	var punycode = __webpack_require__(12);
-	var util = __webpack_require__(14);
+	var punycode = __webpack_require__(13);
+	var util = __webpack_require__(15);
 
 	exports.parse = urlParse;
 	exports.resolve = urlResolve;
@@ -31992,7 +32002,7 @@
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(15);
+	    querystring = __webpack_require__(16);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && util.isObject(url) && url instanceof Url) return url;
@@ -32628,7 +32638,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -33160,10 +33170,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)(module), (function() { return this; }())))
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -33179,7 +33189,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33201,17 +33211,17 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(16);
-	exports.encode = exports.stringify = __webpack_require__(17);
+	exports.decode = exports.parse = __webpack_require__(17);
+	exports.encode = exports.stringify = __webpack_require__(18);
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33297,7 +33307,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33367,14 +33377,16 @@
 
 
 /***/ },
-/* 18 */
-/***/ function(module, exports) {
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
+	var constants = __webpack_require__(6);
+
 	angular.module('ContactModule', [])
 	.controller('contactController', ['$http', function($http) {
-	  var emailRoute = 'https://overbrook-construction.herokuapp.com/email'
+	  var emailRoute = constants.baseUrl + '/email'
 
 
 	  var emailForm = document.getElementsByName('emailForm')[0];
@@ -33397,7 +33409,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33415,25 +33427,24 @@
 
 
 /***/ },
-/* 20 */
-/***/ function(module, exports) {
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	// BRINGING IN THE SERVICE
-
+	// BRINGING IN THE SERVICEva
+	var constants = __webpack_require__(6);
 	angular.module('AdminModule', [])
 	  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
 
 	    var vm = this;
 
 	    var token;
-	    var adminRoute = 'https://overbrook-construction.herokuapp.com/addHomes';
-	    var addUser = 'https://overbrook-construction.herokuapp.com/addUser';
 
-	    var getUser = 'https://overbrook-construction.herokuapp.com/userLogin';
-
-	    var picRoute = 'https://overbrook-construction.herokuapp.com/addPics';
+	    var adminRoute  = constants.baseUrl + '/addHomes';
+	    var addUser = constants.baseUrl + '/addUser';
+	    var getUser  = constants.baseUrl + '/userLogin';
+	    var picRoute = constants.baseUrl + '/addPics';
 
 	    vm.admin = false;
 
@@ -33516,12 +33527,12 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	angular.module('RouteModule', [__webpack_require__(22)])
+	angular.module('RouteModule', [__webpack_require__(23)])
 	  .config(['$routeProvider', function(route) {
 	    route
 	      .when('/home', {
@@ -33569,15 +33580,15 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(23);
+	__webpack_require__(24);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 	/**
@@ -34615,7 +34626,7 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

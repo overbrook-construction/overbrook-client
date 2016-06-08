@@ -1,7 +1,9 @@
+var constants = require(__dirname + '/../../constants');
+
 module.exports = function(app) {
   app.factory('AuthService', ['$http', '$window', function($http, $window) {
     var token;
-    var url = 'https://overbrook-construction.herokuapp.com';
+    var url = constants.baseUrl;
     var auth = {
       createUser(user, cb) {
         cb || function() {};
