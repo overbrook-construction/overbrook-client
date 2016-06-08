@@ -31334,7 +31334,8 @@
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
 	      // SAVE TO SESSION STORAGE
 
-	    }, function errorCallback(response) {
+	    }, function errorCallback(err) {
+		console.error(err);
 	    })
 	  }
 
@@ -31350,6 +31351,7 @@
 	
 
 	exports.baseUrl = 'https://overbrook-server.herokuapp.com'
+	//exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },

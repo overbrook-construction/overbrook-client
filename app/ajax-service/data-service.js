@@ -64,7 +64,8 @@ ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
       $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
       // SAVE TO SESSION STORAGE
 
-    }, function errorCallback(response) {
+    }, function errorCallback(err) {
+	console.error(err);
     })
   }
 
