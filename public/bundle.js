@@ -31354,7 +31354,6 @@
 	    .then(function successCallback(response) {
 	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
-	      console.log('ALL HOME DATA FROM SERVICE : ', obj.allHomeData);
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
 	      // SAVE TO SESSION STORAGE
 
@@ -33513,7 +33512,6 @@
 	    }
 
 	    vm.login = function(user, cb){
-	      console.log('LOGIN HIT WITH USER : ', user);
 	      cb = cb || function() {};
 	      $http.get(getUser, {
 	        headers: {
@@ -33522,7 +33520,6 @@
 	        .then((res) => {
 	          // cb = cb || function() {};
 	          token = $window.localStorage.token = res.data.token;
-	          console.log('AUTH SERVICE : TOKEN GEN : ', token);
 	          vm.admin = true;
 	          cb(null, res);
 	        }, (err) => {

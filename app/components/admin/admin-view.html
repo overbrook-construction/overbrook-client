@@ -1,4 +1,8 @@
 
+<section class="adminMasterSection">
+
+  <nav-directive></nav-directive>
+  
 
 <section ng-show="adminCtrl.admin == false" ng-init="adminCtrl.clearToken()">
   <form class="adminLogin" name="loginForm" ng-submit="adminCtrl.login(admin)">
@@ -23,7 +27,14 @@
     <input type="text" name="name" placeholder="elementary" ng-model="newHouse.elementary">
     <input type="text" name="name" placeholder="ms" ng-model="newHouse.ms">
     <input type="text" name="name" placeholder="hs" ng-model="newHouse.hs">
-    <input type="text" name="name" placeholder="status" ng-model="newHouse.status">
+    <span>Status :</span> <select name="name" ng-model="newHouse.status" required>
+      <option value="Complete">Complete</option>
+      <option value="Future">Future</option>
+      <option value="Constructing">Constructing</option>
+    </select>
+
+
+
     <button type="submit" name="button">submit house</button>
   </form>
   <button type="submit" ng-click="adminCtrl.getHouseData()">Display Homes</button>
@@ -37,6 +48,7 @@
       </ul>
       <button type="submit" ng-click="adminCtrl.updateHouse.rendered = house._id">update record</button>
       <button type="submit" ng-click="adminCtrl.deleteHouse(house._id, house.address)">delete record</button>
+      <hr>
 
     <form name="updateHouseForm" class="updateHouseForm" ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
       <span>address: </span><input type="text" ng-model="house.address">
@@ -52,5 +64,7 @@
       <button type="reset" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
     </form>
   </div>
+
+</section>
 
 </section>

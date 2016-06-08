@@ -344,6 +344,9 @@
   max-width: 100px;
   height: 100px; }
 
+.adminMasterSection {
+  height: auto; }
+
 .footer {
   position: fixed;
   right: 0;
