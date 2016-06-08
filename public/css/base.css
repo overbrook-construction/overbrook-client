@@ -305,6 +305,7 @@
 .grayButton {
   background-color: #CECCCC;
   /* Green */
+  opacity: .7;
   border: none;
   color: white;
   padding: 10px;

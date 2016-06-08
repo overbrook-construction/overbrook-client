@@ -32,6 +32,27 @@ angular.module('MapModule', ['AjaxService'])
   }
   // setTimeout(vm.initMap(), 5000);
 
+  vm.changeButtonColor = function(buttonClicked) {
+    var count = 0;
+    setColor(buttonClicked);
+  }
+
+  function setColor(buttonClicked){
+    if (buttonClicked === 'Complete') {
+      var buttonClicked;
+      buttonClicked = 'completed';
+    }
+    var completeButton = document.getElementsByName('filterButton');
+    for (var i = 0; i < completeButton.length; i++) {
+      if (completeButton[i].className !== buttonClicked) {
+        completeButton[i].className = 'grayButton';
+      }
+      if (completeButton[i].id == buttonClicked) {
+        completeButton[i].className = buttonClicked;
+      }
+    }
+  }
+
     var data;
 
 
