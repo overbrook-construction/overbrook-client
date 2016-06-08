@@ -79,4 +79,4 @@ gulp.task('watch', () =>{
 //   .pipe(gulp.dest('./tests'));
 // });
 
-gulp.task('default', ['del-public', 'webpack', 'copy-html', 'copy-media', 'copy-data-json', 'copy-data-media', 'sass']);
+gulp.task('default', ['del-public', 'webpack', 'copy-html', 'copy-media', 'copy-data-json', 'copy-data-media', 'sass', 'watch']);
