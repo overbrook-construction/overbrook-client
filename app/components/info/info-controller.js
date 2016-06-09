@@ -69,10 +69,30 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
     for (var key in data) {
       var obj = data[key]
       if (data[key]._id == useId) {
+        var nA = 'N/A';
         this.singleHomeData.address = obj.address;
-        this.singleHomeData.sqft = obj.sqft;
+
+        if (obj.sqft == null) {
+          this.singleHomeData.sqft = nA;
+        }
+        else {
+          this.singleHomeData.sqft = obj.sqft;
+        }
+
+        if (obj.bedrooms == null) {
+          this.singleHomeData.bedrooms = nA;
+        }
+        else {
         this.singleHomeData.bedrooms = obj.bedrooms;
-        this.singleHomeData.baths = obj.baths;
+        }
+
+        if (obj.baths == null) {
+          this.singleHomeData.baths = nA;
+        }
+        else {
+          this.singleHomeData.baths = obj.baths;
+        }
+
         this.singleHomeData.lotSize = obj.lotSize;
         this.singleHomeData.schooldistrict = obj.schooldistrict;
         this.singleHomeData.elementary = obj.elementary;
