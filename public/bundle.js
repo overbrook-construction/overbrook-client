@@ -31427,9 +31427,9 @@
 
 	    var vm = this;
 
-	    vm.completeIcon = './media/complete-home.svg';
-	    vm.constructionIcon = './media/construction-home.svg';
-	    vm.futureIcon = './media/future-home.svg';
+	    vm.completeIcon = './media/complete-home.jpg';
+	    vm.constructionIcon = './media/construction-home.jpg';
+	    vm.futureIcon = './media/future-home.jpg';
 
 	    // MAP OBJECT
 	    var map = {};
