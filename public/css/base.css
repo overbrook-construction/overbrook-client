@@ -275,6 +275,9 @@
   padding-top: 10px;
   font-family: 'Lato', sans-serif; }
 
+.viewDetailsLink {
+  text-decoration: none; }
+
 .viewDetailsButton {
   background-color: none;
   padding-left: 20px;
@@ -344,8 +347,16 @@
   max-width: 100px;
   height: 100px; }
 
+#popDiv {
+  text-align: center; }
+
 .adminMasterSection {
-  height: auto; }
+  height: auto;
+  padding: 40px; }
+
+.adminButtons {
+  padding: 10px;
+  margin: 10px; }
 
 .footer {
   position: fixed;
