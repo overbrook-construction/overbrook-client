@@ -31373,11 +31373,10 @@
 
 	
 
-	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
-	// exports.baseUrl = 'overbrook-server.herokuapp.com';
 
-	// exports.baseUrl = 'http://localhost:3000'
+	exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31640,7 +31639,6 @@
 	angular.module('InfoModule', ['AjaxService', 'ngStorage'])
 	  .controller('InfoController', ['ajax', '$controller', '$window', function(ajax, $controller, $window) {
 
-	    console.log('AJAX HOME DATA : ', ajax.allHomeData);
 
 	  var data;
 
@@ -31648,7 +31646,6 @@
 	  this.getData = function() {
 	    if ($window.localStorage){
 	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	      console.log('YUP IS : ', yup);
 	      data = yup
 	    }
 	    else {
@@ -31695,13 +31692,36 @@
 	    // var singleHomeData = {};
 
 	    // FOR THE EDGE CASE !!! INSERT ANOTHER IF STATEMENT THAT CHECKS IF THE HOUSE WITH THAT ID IS UNDER CONSTRUCTION, IF IT IS THAN SET A FLAG TO ONLY LOAD A CERTAIN VIEW WITH CERTAIN DATA
+	    var nA = 'N/A';
 
 	    for (var key in data) {
 	      var obj = data[key]
-	      if (data[key]._id == useId) {
-	        var nA = 'N/A';
-	        this.singleHomeData.address = obj.address;
 
+	      if (data[key]._id == useId) {
+	        if (obj.status == 'Future') {
+	          // console.log(document.getElementsByClassName('removeFuture'));
+	          var removeClass = document.getElementsByClassName('removeFuture');
+	          for (var i = 0; i < removeClass.length; i++) {
+	            removeClass[i].style.display = 'none';
+	          }
+	          this.singleHomeData.address = obj.address;
+	          frontPicture.push(obj.pics[0]);
+	          if (obj.lotSize == null) {
+	            this.singleHomeData.lotSize = nA;
+	          }
+	          else {
+	            this.singleHomeData.lotSize = obj.lotSize;
+	          }
+	        }
+
+	        else {
+	          if (obj.status == 'Constructing') {
+	            var removeSlider = document.getElementsByClassName('infoSliderContainer');
+	            removeSlider[0].style.display = 'none';
+	          }
+
+	        this.singleHomeData.address = obj.address;
+	        console.log('OBJECT IS : ', obj);
 	        if (obj.sqft == null) {
 	          this.singleHomeData.sqft = nA;
 	        }
@@ -31723,7 +31743,14 @@
 	          this.singleHomeData.baths = obj.baths;
 	        }
 
-	        this.singleHomeData.lotSize = obj.lotSize;
+	        if (obj.lotSize == null || undefined) {
+	          this.singleHomeData.lotSize = nA;
+	        }
+	        else {
+	          this.singleHomeData.lotSize = obj.lotSize;
+	        }
+
+	        // this.singleHomeData.lotSize = obj.lotSize;
 	        this.singleHomeData.schooldistrict = obj.schooldistrict;
 	        this.singleHomeData.elementary = obj.elementary;
 	        this.singleHomeData.middle = obj.middle;
@@ -31738,6 +31765,7 @@
 	        }
 	      }
 	    }
+	  }
 	    // var newArray = [];
 	    // newArray.push(this.singleHomeData);
 	    // $window.localStorage.setItem('homeData', JSON.stringify(this.singleHomeData));
@@ -33598,6 +33626,7 @@
 	    }
 
 	    vm.updateHouse = function(house) {
+	      console.log('UPDATATING LOT SIZE WITH : ', house);
 	      vm.updateHouse.rendered = null;
 	      $http.put(adminRoute + '/' + house._id, house, {
 	        headers: {
