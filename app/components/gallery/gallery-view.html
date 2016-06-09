@@ -14,9 +14,9 @@
 <!-- Side bar -->
   <div class="addressSidebar">
     <div class="filterButtonDiv">
-      <button class="completed" type="button" ng-click="galleryCtrl.showSideCompleted('Complete')">Completed</button>
-      <button class="current" type="button" ng-click="galleryCtrl.showSideCompleted('Constructing')">Under Construction</button>
-      <button class="future" type="button" ng-click="galleryCtrl.showSideCompleted('Future')">Building Sites</button>
+      <button class="completed" id="completed" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Complete'); galleryCtrl.changeButtonColor('Complete')">Completed</button>
+      <button class="current" id="current" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Constructing'); galleryCtrl.changeButtonColor('current')">Under Construction</button>
+      <button class="future" id="future" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Future'); galleryCtrl.changeButtonColor('future')">Building Sites</button>
     </div>
     <div class="scrollContainer">
       <div class="addressDiv" ng-repeat="(eachHome, value) in galleryCtrl.clickedAddress">
@@ -24,7 +24,8 @@
           {{value.address}}
         </p>
         <a href="#/gallery/{{value._id}}">
-        <p class="viewDetailsButton" ng-click="galleryCtrl.viewChangeToGallery(value._id)">view details</p>
+        <p class="viewDetailsButton">View Details</p>
+        <!-- <p class="viewDetailsButton" ng-click="galleryCtrl.viewChangeToGallery(value._id)">View Details</p> -->
         </a>
       </div>
     </div>

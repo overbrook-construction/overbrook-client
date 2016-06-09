@@ -63,14 +63,17 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
     // else {
 
     // var singleHomeData = {};
+
+    // FOR THE EDGE CASE !!! INSERT ANOTHER IF STATEMENT THAT CHECKS IF THE HOUSE WITH THAT ID IS UNDER CONSTRUCTION, IF IT IS THAN SET A FLAG TO ONLY LOAD A CERTAIN VIEW WITH CERTAIN DATA
+
     for (var key in data) {
       var obj = data[key]
       if (data[key]._id == useId) {
         this.singleHomeData.address = obj.address;
         this.singleHomeData.sqft = obj.sqft;
         this.singleHomeData.bedrooms = obj.bedrooms;
-        this.singleHomeData.bathrooms = obj.bathrooms;
-        this.singleHomeData.lotsize = obj.lotsize;
+        this.singleHomeData.baths = obj.baths;
+        this.singleHomeData.lotSize = obj.lotSize;
         this.singleHomeData.schooldistrict = obj.schooldistrict;
         this.singleHomeData.elementary = obj.elementary;
         this.singleHomeData.middle = obj.middle;

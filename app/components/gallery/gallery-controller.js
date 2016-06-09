@@ -11,6 +11,30 @@ angular.module('GalleryModule', ['AjaxService'])
     var data;
 
 
+
+    // BUTTON CLICKING FUNCTIONALITY ::
+
+    vm.changeButtonColor = function(buttonClicked) {
+      var count = 0;
+      setColor(buttonClicked);
+    }
+
+    function setColor(buttonClicked){
+      if (buttonClicked === 'Complete') {
+        var buttonClicked;
+        buttonClicked = 'completed';
+      }
+      var completeButton = document.getElementsByName('filterButton');
+      for (var i = 0; i < completeButton.length; i++) {
+        if (completeButton[i].className !== buttonClicked) {
+          completeButton[i].className = 'grayButton';
+        }
+        if (completeButton[i].id == buttonClicked) {
+          completeButton[i].className = buttonClicked;
+        }
+      }
+    }
+
   vm.getData = function() {
     if ($window.localStorage){
       var yup = JSON.parse($window.localStorage.getItem('allHomeData'));

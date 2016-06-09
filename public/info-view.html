@@ -17,14 +17,14 @@
   <div class="infoTextContainer">
     <!-- house info -->
     <p class="infoText">{{infoCtrl.singleHomeData.address}}</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.sqft}}</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.lotsize}}</p>
-    <p class="infoText">Bedrooms: {{infoCtrl.singleHomeData.bedrooms}}</p>
-    <p class="infoText">Bathrooms: {{infoCtrl.singleHomeData.bathrooms}}</p>
+    <p class="infoText">{{infoCtrl.singleHomeData.sqft | number : fractionSize}} square foot house</p>
+    <p class="infoText">{{infoCtrl.singleHomeData.lotSize | number : fractionSize}} square foot lot</p>
+    <p class="infoText">{{infoCtrl.singleHomeData.bedrooms}} bedrooms</p>
+    <p class="infoText">{{infoCtrl.singleHomeData.baths}} bathrooms</p>
     <p class="infoText">{{infoCtrl.singleHomeData.elementary}}</p>
     <p class="infoText">{{infoCtrl.singleHomeData.middle}}</p>
     <p class="infoText">{{infoCtrl.singleHomeData.hs}}</p>
-    <p class="infoText">Status: {{infoCtrl.singleHomeData.status}}</p>
+    <!-- <p class="infoText">Status: {{infoCtrl.singleHomeData.status}}</p> -->
   <!-- map pic container -->
   <div class="infoMapImageContainer">
     <!-- MAIN PICTURE -->

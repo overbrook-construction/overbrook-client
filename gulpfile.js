@@ -11,7 +11,7 @@ let viewPaths = ['app/**/*.html'];
 let stylePaths = ['app/style/*.scss'];
 let mediaPaths = ['app/img/*/**'];
 let jsonPaths = ['data/*']
-let dataMedia = ['data/img/**'];
+// let dataMedia = ['data/img/**'];
 
 //OUTPUT LOCATION
 let output = __dirname + '/public/';
@@ -40,11 +40,11 @@ gulp.task('copy-data-json', () => {
     .pipe(gulp.dest(output));
 });
 
-gulp.task('copy-data-media', () => {
-  gulp.src(dataMedia)
-    .pipe(rename({dirname: '/data/img'}))
-    .pipe(gulp.dest(output));
-});
+// gulp.task('copy-data-media', () => {
+//   gulp.src(dataMedia)
+//     .pipe(rename({dirname: '/data/img'}))
+//     .pipe(gulp.dest(output));
+// });
 
 gulp.task('webpack', () => {
   return gulp.src(__dirname + '/app/entry.js')
@@ -67,7 +67,7 @@ gulp.task('watch', () =>{
   gulp.watch(jsPaths, ['webpack']);
   gulp.watch(viewPaths, ['copy-html']);
   gulp.watch(mediaPaths, ['copy-media']);
-  gulp.watch(dataMedia, ['copy-data-media']);
+  // gulp.watch(dataMedia, ['copy-data-media']);
   gulp.watch(jsonPaths, ['copy-data-json']);
 });
 
@@ -79,4 +79,5 @@ gulp.task('watch', () =>{
 //   .pipe(gulp.dest('./tests'));
 // });
 
-gulp.task('default', ['del-public', 'webpack', 'copy-html', 'copy-media', 'copy-data-json', 'copy-data-media', 'sass']);
+gulp.task('default', ['del-public', 'webpack', 'copy-html', 'copy-media', 'copy-data-json', 'sass', 'watch']);
+// gulp.task('default', ['del-public', 'webpack', 'copy-html', 'copy-media', 'copy-data-json', 'copy-data-media', 'sass', 'watch']);

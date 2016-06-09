@@ -57,8 +57,8 @@
 	__webpack_require__(19);
 	__webpack_require__(20)
 	__webpack_require__(21);
-	__webpack_require__(22);
-	__webpack_require__(25);
+	__webpack_require__(23);
+	__webpack_require__(26);
 
 
 /***/ },
@@ -31152,6 +31152,30 @@
 	    var data;
 
 
+
+	    // BUTTON CLICKING FUNCTIONALITY ::
+
+	    vm.changeButtonColor = function(buttonClicked) {
+	      var count = 0;
+	      setColor(buttonClicked);
+	    }
+
+	    function setColor(buttonClicked){
+	      if (buttonClicked === 'Complete') {
+	        var buttonClicked;
+	        buttonClicked = 'completed';
+	      }
+	      var completeButton = document.getElementsByName('filterButton');
+	      for (var i = 0; i < completeButton.length; i++) {
+	        if (completeButton[i].className !== buttonClicked) {
+	          completeButton[i].className = 'grayButton';
+	        }
+	        if (completeButton[i].id == buttonClicked) {
+	          completeButton[i].className = buttonClicked;
+	        }
+	      }
+	    }
+
 	  vm.getData = function() {
 	    if ($window.localStorage){
 	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
@@ -31330,7 +31354,6 @@
 	    .then(function successCallback(response) {
 	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
-	      console.log('ALL HOME DATA FROM SERVICE : ', obj.allHomeData);
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
 	      // SAVE TO SESSION STORAGE
 
@@ -31350,8 +31373,8 @@
 
 	
 
-	exports.baseUrl = 'https://overbrook-server.herokuapp.com'
-	//exports.baseUrl = 'http://localhost:3000'
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31402,13 +31425,6 @@
 	angular.module('MapModule', ['AjaxService'])
 	  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', function($http, $location, ajax, $controller, $window) {
 
-
-	  //   vm.load = function() {
-	  //   var sleep = document.createElement('script');
-	  //   sleep.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBBv4Sc8DwDft9TdcwDmS9d01SBmrCJFXA';
-	  //   document.body.appendChild(sleep);
-	  // }
-
 	    var vm = this;
 
 	    vm.completeIcon = './media/complete-home.svg';
@@ -31424,7 +31440,27 @@
 	      zoom: 12
 	    });
 	  }
-	  // setTimeout(vm.initMap(), 5000);
+
+	  vm.changeButtonColor = function(buttonClicked) {
+	    var count = 0;
+	    setColor(buttonClicked);
+	  }
+
+	  function setColor(buttonClicked){
+	    if (buttonClicked === 'Complete') {
+	      var buttonClicked;
+	      buttonClicked = 'completed';
+	    }
+	    var completeButton = document.getElementsByName('filterButton');
+	    for (var i = 0; i < completeButton.length; i++) {
+	      if (completeButton[i].className !== buttonClicked) {
+	        completeButton[i].className = 'grayButton';
+	      }
+	      if (completeButton[i].id == buttonClicked) {
+	        completeButton[i].className = buttonClicked;
+	      }
+	    }
+	  }
 
 	    var data;
 
@@ -31441,26 +31477,10 @@
 	      data = ajax.allHomeData;
 	    }
 	  }
-	    // vm.getData = function() {
-	    //   ajax.getData();
-	    //   vm.houseData = ajax.allHomeData;
-	    // }
 
 	    vm.clickedAddress = [];
 	    vm.geoArray = [];
 	    vm.clickedPics = [];
-
-
-
-
-	//     var promiseArray = objectArray.map(function(value, index) {
-	// return new Promise(geocoding stuff)
-	// })
-
-	// Promise.all(promiseArray)
-	// .then(clearmarkers, drawmarkers)
-	// .catch(handleErrorSomehow)
-
 
 	  //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
 	  var geoFunc = function(objectArray, iconValue) {
@@ -31473,9 +31493,6 @@
 
 	          geocoder.geocode({'address': value.address}, function(results, status) {
 	            if(status === google.maps.GeocoderStatus.OK) {
-	              // console.log('RESULTS FROM NEW PROMISE : ', results[0].geometry.location);
-	              // geoArray.push(results[0].geometry.location)
-	              // console.log(results[0].geometry.location);
 	              resolve(results[0].geometry.location);
 	            }
 
@@ -31493,7 +31510,7 @@
 	  }
 
 
-	    var contentFig = 'sam Gruse';
+	    var contentFig;
 	    var homePic;
 
 	    // MAP FUNCTIONALITY
@@ -31527,9 +31544,11 @@
 	          (function(marker, infowindow) {
 	            marker.addListener('click', function() {
 	              if(infowindow) {
+	                // infowindow.close();
 	                closeInfo();
 	              }
 	              closeInfo();
+	              infowindow.close();
 	              infowindow.open(map.googleMap, marker)
 	            })
 	          })(marker, infowindow);
@@ -31557,7 +31576,6 @@
 	        var obj = data[key];
 	        if(obj.status === clickedValue) {
 	          vm.clickedAddress.push(obj);
-	          // vm.clickedPics.push(obj.pics[0]);
 	        }
 	      }
 	      geoFunc(vm.clickedAddress, iconValue, function(){});
@@ -31635,14 +31653,17 @@
 	    // else {
 
 	    // var singleHomeData = {};
+
+	    // FOR THE EDGE CASE !!! INSERT ANOTHER IF STATEMENT THAT CHECKS IF THE HOUSE WITH THAT ID IS UNDER CONSTRUCTION, IF IT IS THAN SET A FLAG TO ONLY LOAD A CERTAIN VIEW WITH CERTAIN DATA
+
 	    for (var key in data) {
 	      var obj = data[key]
 	      if (data[key]._id == useId) {
 	        this.singleHomeData.address = obj.address;
 	        this.singleHomeData.sqft = obj.sqft;
 	        this.singleHomeData.bedrooms = obj.bedrooms;
-	        this.singleHomeData.bathrooms = obj.bathrooms;
-	        this.singleHomeData.lotsize = obj.lotsize;
+	        this.singleHomeData.baths = obj.baths;
+	        this.singleHomeData.lotSize = obj.lotSize;
 	        this.singleHomeData.schooldistrict = obj.schooldistrict;
 	        this.singleHomeData.elementary = obj.elementary;
 	        this.singleHomeData.middle = obj.middle;
@@ -33434,28 +33455,32 @@
 
 	'use strict';
 
-	// BRINGING IN THE SERVICEva
 	var constants = __webpack_require__(6);
+	__webpack_require__(22);
+
 	angular.module('AdminModule', [])
 	  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
 
 	    var vm = this;
-
 	    var token;
-
 	    var adminRoute  = constants.baseUrl + '/addHomes';
+	    var pictureRoute = constants.baseUrl + '/picUpload';
 	    var addUser = constants.baseUrl + '/addUser';
 	    var getUser  = constants.baseUrl + '/userLogin';
 	    var picRoute = constants.baseUrl + '/addPics';
 
 	    vm.admin = false;
 
+	    vm.resetForm = function(formName){
+	      var submitForm = document.getElementsByName(formName)[0];
+	      submitForm.reset();
+	    }
+
 	    vm.clearToken = function() {
 	      $window.localStorage.token = null;
 	    }
 
 	    vm.login = function(user, cb){
-	      console.log('LOGIN HIT WITH USER : ', user);
 	      cb = cb || function() {};
 	      $http.get(getUser, {
 	        headers: {
@@ -33464,7 +33489,6 @@
 	        .then((res) => {
 	          // cb = cb || function() {};
 	          token = $window.localStorage.token = res.data.token;
-	          console.log('AUTH SERVICE : TOKEN GEN : ', token);
 	          vm.admin = true;
 	          cb(null, res);
 	        }, (err) => {
@@ -33472,15 +33496,24 @@
 	        })
 	      }
 
+	      //  ADDD PICTURE FUNCTIONALITY
+	      vm.addPictures = function(file) {
+	        console.log("ADD PICTURES HIT WITH : ", file);
+	        $http.post(pictureRoute, file)
+	      }
+
 	    vm.allHouses;
 
 	    vm.submitHouse = function(newHouse) {
 	      $http.post(adminRoute, newHouse, {
-	        // headers: {
-	        //   token: 'blah'
-	        // }
+	        headers: {
+	          token: token
+	        }
 	      })
 	      .success(function(data, status, headers, config) {
+	        vm.getHouseData();
+	        vm.resetForm('submitHouseForm');
+
 	        console.log('ADDED HOUSE FROM ADMIN CTRL');
 	      })
 	      .error(function(data, status, headers, config) {
@@ -33489,8 +33522,11 @@
 	    }
 
 	    vm.getHouseData = function() {
-	      console.log('GET REQUEST HAS BEEN RECEIVED');
-	      $http.get(adminRoute)
+	      $http.get(adminRoute, {
+	        headers: {
+	          token: token
+	        }
+	      })
 	      .success(function(data, status, headers, config) {
 	        console.log('DATA FROM GET IS : ', data);
 	        // allHouses.push(data);
@@ -33504,26 +33540,35 @@
 	    vm.updateHouse = function(house) {
 	      vm.updateHouse.rendered = null;
 	      $http.put(adminRoute + '/' + house._id, house, {
-
+	        headers: {
+	          token: token
+	        }
 	      }).success(function(data, status, headers, config) {
-	        console.log('DATA FROM GET IS : ', data);
+	        vm.getHouseData();
+	        vm.resetForm('updateHouseForm');
 	      })
 	      .error(function(data, status, headers, config) {
 	              console.log('CANNONT GET HOUSES');
 	      })
 	    }
 
-	    vm.deleteHouse = function(house, token) {
-	      console.log('DELETE HOUSE HIT WITH : ', house);
-	      $http.delete(adminRoute + '/' + house, {
+	    vm.deleteHouse = function(house, address) {
+	      var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
+	      if (answer) {
 
+	      $http.delete(adminRoute + '/' + house, {
+	        headers: {
+	          token: token
+	        }
 	      }).success(function(data, status, headers, config) {
+	        vm.getHouseData();
 	        console.log(house + ' HAS BEEN DELETED');
 	      })
 	      .error(function(data, status, headers, config) {
 	        console.log('CANNOT DELETE HOUSES');
 	      })
 	    }
+	  }
 
 	  }])
 
@@ -33532,9 +33577,62 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var constants = __webpack_require__(6);
+
+	module.exports = function() {
+	  app.factory('AuthService', ['$http', '$window', function($http, $window) {
+	    var token;
+	    var url = constants.baseUrl;
+	    var auth = {
+	      // createUser(user, cb) {
+	      //   cb || function() {};
+	      //   console.log('USER COMING IN : ', user);
+	      //   $http.post(url + '/addUser', user)
+	      //     .then((res) => {
+	      //       token = $window.localStorage.token = res.data.token;
+	      //       cb(null, res)
+	      //     }, (err) => {
+	      //       cb(err)
+	      //     })
+	      // },
+	      getToken() {
+	        return token || $window.localStorage.token;
+	      }
+	    // signOut(cb) {
+	    //   // cb = cb || function() {}
+	    //   token = null;
+	    //   $window.localStorage.token = null;
+	    //   cb && cb();
+	    // },
+	    // signIn(user, cb) {
+	    //   console.log('AUTH SERVICE : SIGN IN HIT WITH : ', user);
+	    //   cb = cb || function() {};
+	    //   $http.get(url + '/signin', {
+	    //     headers: {
+	    //       authorization: 'Basic ' + btoa(user.username + ':' + user.password)
+	    //     }})
+	    //   .then((res) => {
+	    //     // cb = cb || function() {};
+	    //     token = $window.localStorage.token = res.data.token;
+	    //     console.log('AUTH SERVICE : TOKEN GEN : ', token);
+	    //     cb(null, res);
+	    //   }, (err) => {
+	    //     cb(err);
+	    //   })
+	    // }
+	  }
+	    return auth;
+	  }])
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
-	angular.module('RouteModule', [__webpack_require__(23)])
+	angular.module('RouteModule', [__webpack_require__(24)])
 	  .config(['$routeProvider', function(route) {
 	    route
 	      .when('/home', {
@@ -33582,15 +33680,15 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(24);
+	__webpack_require__(25);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 	/**
@@ -34628,7 +34726,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

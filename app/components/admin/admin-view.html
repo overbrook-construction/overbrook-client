@@ -1,51 +1,81 @@
 
+<section class="adminMasterSection">
+
+  <nav-directive></nav-directive>
+
 
 <section ng-show="adminCtrl.admin == false" ng-init="adminCtrl.clearToken()">
   <form class="adminLogin" name="loginForm" ng-submit="adminCtrl.login(admin)">
     <input type="text" name="name" placeholder="username" ng-model="admin.username">
-    <input type="text" name="name" placeholder="password" ng-model="admin.password">
+
+    <input type="{{showpassword ? 'text' : 'password'}}" ng-model="admin.password">
+
+    <!-- <input type="password" name="name" placeholder="password" ng-model="admin.password"> -->
+    <input type="checkbox" ng-model="showpassword" ng-checked="false">
     <button type="submit">Login</button>
 
   </form>
 </section>
 
 <section ng-show="adminCtrl.admin == true">
-  <form ng-submit="adminCtrl.submitHouse(newHouse)">
+  <form name="submitHouseForm" class="submitHouseForm" ng-submit="adminCtrl.submitHouse(newHouse)">
     <input type="text" name="name" placeholder="address" ng-model="newHouse.address">
-    <input type="text" name="name" placeholder="sqft" ng-model="newHouse.sqft">
-    <input type="text" name="name" placeholder="lotSize" ng-model="newHhstSize">
-    <input type="text" name="name" placeholder="bedrooms" ng-model="newHouse.bedrooms">
-    <input type="text" name="name" placeholder="baths" ng-model="newHouse.baths">
+    <input type="number" name="name" placeholder="sqft" ng-model="newHouse.sqft">
+    <input type="number" name="name" placeholder="lotSize" ng-model="newHhstSize">
+    <input type="number" name="name" placeholder="bedrooms" ng-model="newHouse.bedrooms">
+    <input type="number" name="name" placeholder="baths" ng-model="newHouse.baths">
     <input type="text" name="name" placeholder="elementary" ng-model="newHouse.elementary">
     <input type="text" name="name" placeholder="ms" ng-model="newHouse.ms">
     <input type="text" name="name" placeholder="hs" ng-model="newHouse.hs">
-    <input type="text" name="name" placeholder="status" ng-model="newHouse.status">
+    <span>Status :</span> <select name="name" ng-model="newHouse.status" required>
+      <option value="Complete">Complete</option>
+      <option value="Future">Future</option>
+      <option value="Constructing">Constructing</option>
+    </select>
+
+
+
     <button type="submit" name="button">submit house</button>
   </form>
   <button type="submit" ng-click="adminCtrl.getHouseData()">Display Homes</button>
+</section>
+
+<section name="fileUploader" ng-show="adminCtrl.admin == true">
+  <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
+    <input type="file" name="fileField" value="upload">
+    <button type="submit">upload file</button>
+  </form>
 </section>
 
 <section>
     <div ng-repeat="house in adminCtrl.allHouses">
       <ul>
         <li class="listItem">Address: {{house.address}}</li>
+        <li class="listItem">Status: {{house.status}}</li>
       </ul>
       <button type="submit" ng-click="adminCtrl.updateHouse.rendered = house._id">update record</button>
-      <button type="submit" ng-click="adminCtrl.deleteHouse(house._id)">delete record</button>
+      <button type="submit" ng-click="adminCtrl.deleteHouse(house._id, house.address)">delete record</button>
+      <hr>
 
-    <form ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
+    <form name="updateHouseForm" class="updateHouseForm" ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
       <span>address: </span><input type="text" ng-model="house.address">
-      <span>sqft: </span><input type="text" ng-model="house.sqft">
-      <span>lotsize: </span><input type="text" ng-model="house.lotsize">
-      <span>bedrooms: </span><input type="text" ng-model="house.bedrooms">
-      <span>baths: </span><input type="text" ng-model="house.baths">
+      <span>sqft: </span><input type="number" ng-model="house.sqft">
+      <span>lotsize: </span><input type="number" ng-model="house.lotsize">
+      <span>bedrooms: </span><input type="number" ng-model="house.bedrooms">
+      <span>baths: </span><input type="number" ng-model="house.baths">
       <span>elementary: </span><input type="text" ng-model="house.elementary">
       <span>ms: </span><input type="text" ng-model="house.ms">
       <span>hs: </span><input type="text" ng-model="house.hs">
-      <span>status: </span><input type="text" ng-model="house.status">
+      <span>Status :</span> <select name="name" ng-model="house.status" required>
+        <option value="Complete">Complete</option>
+        <option value="Future">Future</option>
+        <option value="Constructing">Constructing</option>
+      </select>
       <button type="submit" ng-click="adminCtrl.updateHouse(house)">save changes</button>
       <button type="reset" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
     </form>
   </div>
+
+</section>
 
 </section>
