@@ -9,6 +9,7 @@ angular.module('AdminModule', [])
     var vm = this;
     var token;
     var adminRoute  = constants.baseUrl + '/addHomes';
+    var pictureRoute = constants.baseUrl + '/picUpload';
     var addUser = constants.baseUrl + '/addUser';
     var getUser  = constants.baseUrl + '/userLogin';
     var picRoute = constants.baseUrl + '/addPics';
@@ -38,6 +39,12 @@ angular.module('AdminModule', [])
         }, (err) => {
           cb(err);
         })
+      }
+
+      //  ADDD PICTURE FUNCTIONALITY
+      vm.addPictures = function(file) {
+        console.log("ADD PICTURES HIT WITH : ", file);
+        $http.post(pictureRoute, file)
       }
 
     vm.allHouses;

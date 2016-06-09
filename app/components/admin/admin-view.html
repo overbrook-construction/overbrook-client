@@ -40,6 +40,13 @@
   <button type="submit" ng-click="adminCtrl.getHouseData()">Display Homes</button>
 </section>
 
+<section name="fileUploader" ng-show="adminCtrl.admin == true">
+  <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
+    <input type="file" name="fileField" value="upload">
+    <button type="submit">upload file</button>
+  </form>
+</section>
+
 <section>
     <div ng-repeat="house in adminCtrl.allHouses">
       <ul>
