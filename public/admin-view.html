@@ -12,7 +12,7 @@
 
     <!-- <input type="password" name="name" placeholder="password" ng-model="admin.password"> -->
     <input type="checkbox" ng-model="showpassword" ng-checked="false">
-    <button type="submit">Login</button>
+    <button class="adminButtons" type="submit">Login</button>
 
   </form>
 </section>
@@ -35,15 +35,15 @@
 
 
 
-    <button type="submit" name="button">submit house</button>
+    <button type="submit" class="adminButtons" name="button">submit house</button>
   </form>
-  <button type="submit" ng-click="adminCtrl.getHouseData()">Display Homes</button>
+  <button type="submit" class="adminButtons" ng-click="adminCtrl.getHouseData()">Display Homes</button>
 </section>
 
 <section name="fileUploader" ng-show="adminCtrl.admin == true">
   <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
     <input type="file" name="fileField" value="upload">
-    <button type="submit">upload file</button>
+    <button type="submit" class="adminButtons" >upload file</button>
   </form>
 </section>
 
@@ -53,8 +53,8 @@
         <li class="listItem">Address: {{house.address}}</li>
         <li class="listItem">Status: {{house.status}}</li>
       </ul>
-      <button type="submit" ng-click="adminCtrl.updateHouse.rendered = house._id">update record</button>
-      <button type="submit" ng-click="adminCtrl.deleteHouse(house._id, house.address)">delete record</button>
+      <button type="submit" class="adminButtons" ng-click="adminCtrl.updateHouse.rendered = house._id">update record</button>
+      <button type="submit" class="adminButtons" ng-click="adminCtrl.deleteHouse(house._id, house.address)">delete record</button>
       <hr>
 
     <form name="updateHouseForm" class="updateHouseForm" ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
@@ -71,8 +71,8 @@
         <option value="Future">Future</option>
         <option value="Constructing">Constructing</option>
       </select>
-      <button type="submit" ng-click="adminCtrl.updateHouse(house)">save changes</button>
-      <button type="reset" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
+      <button type="submit" class="adminButtons" ng-click="adminCtrl.updateHouse(house)">save changes</button>
+      <button type="reset" class="adminButtons" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
     </form>
   </div>
 

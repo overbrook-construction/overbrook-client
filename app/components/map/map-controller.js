@@ -24,6 +24,10 @@ angular.module('MapModule', ['AjaxService'])
     });
   }
 
+  var completedGeoAddresses;
+  var constructingGeoAddresses;
+  var futureGeoAddresses;
+
   vm.changeButtonColor = function(buttonClicked) {
     var count = 0;
     setColor(buttonClicked);
@@ -66,7 +70,7 @@ angular.module('MapModule', ['AjaxService'])
     vm.clickedPics = [];
 
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
-  var geoFunc = function(objectArray, iconValue) {
+  var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
     var geoArray = [];
 
     var promiseArray = objectArray.map(function(value, index) {
@@ -85,8 +89,21 @@ angular.module('MapModule', ['AjaxService'])
       })
       Promise.all(promiseArray)
       .then(function(result) {
+
+        if (clickedValue == 'Complete') {
+          completedGeoAddresses = result;
+        }
+
+        if (clickedValue == 'Constructing') {
+          constructingGeoAddresses = result;
+        }
+
+        if (clickedValue == 'Future') {
+          futureGeoAddresses = result;
+        }
+
         mapObject.clearMarkers();
-        mapObject.drawMarkers(result, iconValue, objectArray);
+        mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
       })
       .catch(function(error){
       })
@@ -105,7 +122,7 @@ angular.module('MapModule', ['AjaxService'])
           var setContent = '<div id="popDiv">\
           <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
           <p class="popAddress">' + objectArray[i].address + '</p>\
-          <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">view detail</a>\
+          <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
           </div>';
 
           var infowindow = new google.maps.InfoWindow({
@@ -151,8 +168,14 @@ angular.module('MapModule', ['AjaxService'])
       }
     }
 
+    // if (completedGeoAddresses.length) {
+    //   mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
+    // }
 
     vm.showSideCompleted = function(clickedValue, iconValue){
+
+
+
       vm.clickedAddress = [];
       var icon;
       for (var key in data) {
@@ -161,7 +184,21 @@ angular.module('MapModule', ['AjaxService'])
           vm.clickedAddress.push(obj);
         }
       }
-      geoFunc(vm.clickedAddress, iconValue, function(){});
+      if (clickedValue == 'Complete' && completedGeoAddresses){
+        mapObject.clearMarkers();
+        mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
+      }
+      if (clickedValue == 'Constructing' && constructingGeoAddresses){
+        mapObject.clearMarkers();
+        mapObject.drawMarkers(constructingGeoAddresses, iconValue, vm.clickedAddress)
+      }
+      if (clickedValue == 'Future' && futureGeoAddresses){
+        mapObject.clearMarkers();
+        mapObject.drawMarkers(futureGeoAddresses, iconValue, vm.clickedAddress)
+      }
+      else {
+        geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
+      }
     }
 
   }])
