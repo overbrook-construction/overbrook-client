@@ -166,8 +166,9 @@
 
 .galleryMasterDiv {
   text-align: center;
-  width: 100%;
-  height: auto; }
+  width: 70%;
+  height: auto;
+  margin-bottom: 80px; }
 
 .thumbnail {
   width: 350px;
@@ -258,12 +259,12 @@
   text-align: center;
   background-color: white;
   width: 30%;
-  max-height: 630px;
+  max-height: 700px;
   padding-top: 0px; }
 
 .scrollContainer {
   overflow: scroll;
-  height: 548px; }
+  height: 600px; }
 
 .addressDiv {
   border-bottom: 2px solid #E0E0E0;
@@ -302,7 +303,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif; }
 
 .grayButton {
@@ -316,7 +317,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif; }
 
 .current {
@@ -328,7 +329,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 40%;
+  width: 33%;
   font-family: 'Lato', sans-serif; }
 
 .future {
@@ -340,7 +341,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif; }
 
 .popPic {

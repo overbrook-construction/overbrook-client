@@ -199,8 +199,9 @@
 
 .galleryMasterDiv {
   text-align: center;
-  width: 100%;
+  width: 70%;
   height: auto;
+  margin-bottom: 80px;
 }
 
 .thumbnail {
@@ -314,13 +315,13 @@
   text-align: center;
   background-color: white;
   width: 30%;
-  max-height: 630px;
+  max-height: 700px;
   padding-top: 0px;
 }
 
 .scrollContainer {
   overflow: scroll;
-  height: 548px;
+  height: 600px;
 }
 
 .addressDiv {
@@ -365,7 +366,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif;
   // margin: 0px 5px 0px 0px;
 }
@@ -381,7 +382,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif;
 }
 
@@ -394,7 +395,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 40%;
+  width: 33%;
   font-family: 'Lato', sans-serif;
   // margin: 0px 5px 0px 5px;
 }
@@ -408,7 +409,7 @@
   text-decoration: none;
   display: inline-block;
   font-size: 2.5vmin;
-  width: 30%;
+  width: 33%;
   font-family: 'Lato', sans-serif;
   // margin: 0px 0px 0px 5px;
 }
