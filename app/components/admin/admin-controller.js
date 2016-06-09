@@ -83,6 +83,7 @@ angular.module('AdminModule', [])
     }
 
     vm.updateHouse = function(house) {
+      console.log('UPDATATING LOT SIZE WITH : ', house);
       vm.updateHouse.rendered = null;
       $http.put(adminRoute + '/' + house._id, house, {
         headers: {

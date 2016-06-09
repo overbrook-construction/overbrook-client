@@ -4,9 +4,12 @@
     <section class="infoContainer">
       <div class="infoImageContainer">
         <img src="{{infoCtrl.frontPicture[0]}}" class="infoMainImage">
+
+        <!-- <div class="removeClass"> -->
           <div class="infoSliderContainer">
             <img ng-repeat="(key, value) in infoCtrl.singleHomeData.pics" src="{{value}}" class="infoSliderImage" ng-click="infoCtrl.singleHomeData.changePic(key, value)">
           </div>
+        <!-- </div> -->
       </div>
 
 
@@ -17,13 +20,19 @@
   <div class="infoTextContainer">
     <!-- house info -->
     <p class="infoText">{{infoCtrl.singleHomeData.address}}</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.sqft | number : fractionSize}} square foot house</p>
+
+    <div class="removeFuture">
+      <p class="infoText">{{infoCtrl.singleHomeData.sqft | number : fractionSize}} square foot house</p>
+    </div>
+
     <p class="infoText">{{infoCtrl.singleHomeData.lotSize | number : fractionSize}} square foot lot</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.bedrooms}} bedrooms</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.baths}} bathrooms</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.elementary}}</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.middle}}</p>
-    <p class="infoText">{{infoCtrl.singleHomeData.hs}}</p>
+    <div class="removeFuture">
+      <p class="infoText">{{infoCtrl.singleHomeData.bedrooms}} bedrooms</p>
+      <p class="infoText">{{infoCtrl.singleHomeData.baths}} bathrooms</p>
+      <p class="infoText">{{infoCtrl.singleHomeData.elementary}}</p>
+      <p class="infoText">{{infoCtrl.singleHomeData.middle}}</p>
+      <p class="infoText">{{infoCtrl.singleHomeData.hs}}</p>
+    </div>
     <!-- <p class="infoText">Status: {{infoCtrl.singleHomeData.status}}</p> -->
   <!-- map pic container -->
   <div class="infoMapImageContainer">
