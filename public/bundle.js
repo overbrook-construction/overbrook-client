@@ -31511,15 +31511,18 @@
 
 	        if (clickedValue == 'Complete') {
 	          completedGeoAddresses = result;
+	          console.log('COMOPLETED : ', completedGeoAddresses);
 	          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
 	        }
 
 	        if (clickedValue == 'Constructing') {
 	          constructingGeoAddresses = result;
+	          console.log('CONSTRUCTING : ', constructingGeoAddresses);
 	        }
 
 	        if (clickedValue == 'Future') {
 	          futureGeoAddresses = result;
+	          console.log('FUTURE : ', futureGeoAddresses);
 	        }
 
 	        mapObject.clearMarkers();
