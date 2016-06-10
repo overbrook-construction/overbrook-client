@@ -41,10 +41,12 @@
 </section>
 
 <section name="fileUploader" ng-show="adminCtrl.admin == true">
-  <!-- <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)"> -->
-    <form action="https://overbrook-server.herokuapp.com" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
+  <!-- STAGING ___________________ -->
+  <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
+  <!-- PRODUCTION ___________________________ -->
+    <!-- <form action="https://overbrook-server.herokuapp.com" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)"> -->
 
-    <input type="file" name="fileField" value="upload">
+    <input type="file" name="files[]" value="upload" multiple>
     <button type="submit" class="adminButtons" >upload file</button>
   </form>
 </section>
