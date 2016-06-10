@@ -302,8 +302,8 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 2.5vmin;
-  width: 33%;
+  font-size: 2vmin;
+  width: 33.3%;
   font-family: 'Lato', sans-serif; }
 
 .grayButton {
@@ -316,8 +316,8 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 2.5vmin;
-  width: 33%;
+  font-size: 2vmin;
+  width: 33.3%;
   font-family: 'Lato', sans-serif; }
 
 .current {
@@ -328,8 +328,8 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 2.5vmin;
-  width: 33%;
+  font-size: 2vmin;
+  width: 33.3%;
   font-family: 'Lato', sans-serif; }
 
 .future {
@@ -340,8 +340,8 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 2.5vmin;
-  width: 33%;
+  font-size: 2vmin;
+  width: 33.3%;
   font-family: 'Lato', sans-serif; }
 
 .popPic {
