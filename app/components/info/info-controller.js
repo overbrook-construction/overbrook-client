@@ -92,7 +92,6 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
           }
 
         this.singleHomeData.address = obj.address;
-        console.log('OBJECT IS : ', obj);
         if (obj.sqft == null) {
           this.singleHomeData.sqft = nA;
         }

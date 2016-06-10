@@ -31373,10 +31373,10 @@
 
 	
 
-	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
 
-	exports.baseUrl = 'http://localhost:3000'
+	// exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31511,6 +31511,7 @@
 
 	        if (clickedValue == 'Complete') {
 	          completedGeoAddresses = result;
+	          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
 	        }
 
 	        if (clickedValue == 'Constructing') {
@@ -31536,17 +31537,18 @@
 	    var markers = [];
 	    var mapObject = {
 	      drawMarkers: function(geoArray, iconValue, objectArray) {
+	        var setContent;
+	        var infowindow = new google.maps.InfoWindow({
+	          content: setContent
+	        });
+
 	        for (var i = 0; i < geoArray.length; i++) {
 
-	          var setContent = '<div id="popDiv">\
+	          setContent = '<div id="popDiv">\
 	          <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
 	          <p class="popAddress">' + objectArray[i].address + '</p>\
 	          <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
 	          </div>';
-
-	          var infowindow = new google.maps.InfoWindow({
-	            content: setContent
-	          });
 
 	          var marker = new google.maps.Marker({
 	            position: geoArray[i],
@@ -31556,21 +31558,20 @@
 
 
 	          function closeInfo () {
-	            console.log('CLOSE INFO HAS BEEN HIT');
 	            infowindow.close();
 	          }
 
-	          (function(marker, infowindow) {
+	          (function(marker, setContent) {
 	            marker.addListener('click', function() {
 	              if(infowindow) {
-	                // infowindow.close();
 	                closeInfo();
 	              }
 	              closeInfo();
 	              infowindow.close();
+	              infowindow.setContent(setContent)
 	              infowindow.open(map.googleMap, marker)
 	            })
-	          })(marker, infowindow);
+	          })(marker, setContent);
 
 	          markers.push(marker);
 	        }
@@ -31593,7 +31594,11 @@
 
 	    vm.showSideCompleted = function(clickedValue, iconValue){
 
-
+	      // POSSIBLE LOCAL STORAGE TECHNIQUE >>>>>
+	      // if ($window.localStorage.getItem('completedGeoAddresses')) {
+	        // var x = JSON.parse($window.localStorage.getItem('completedGeoAddresses'));
+	        // console.log('GEO FROM LOCAL STORAGE : ', x[0].lat);
+	      // }
 
 	      vm.clickedAddress = [];
 	      var icon;
@@ -31721,7 +31726,6 @@
 	          }
 
 	        this.singleHomeData.address = obj.address;
-	        console.log('OBJECT IS : ', obj);
 	        if (obj.sqft == null) {
 	          this.singleHomeData.sqft = nA;
 	        }
