@@ -33589,10 +33589,21 @@
 	      }
 
 	      //  ADDD PICTURE FUNCTIONALITY
-	      vm.addPictures = function(file) {
-	        console.log("ADD PICTURES HIT WITH : ", file);
-	        $http.post(pictureRoute, file)
-	      }
+	      // vm.addPictures = function(file) {
+	      //   console.log("ADD PICTURES HIT WITH : ", file);
+	      //   $http.post(pictureRoute, file, {
+	      //     headers: {
+	      //       token: token
+	      //     }
+	      //   })
+	      //   .success(function(data, status, headers, config) {
+	      //
+	      //     console.log('ADDED PICTURES');
+	      //   })
+	      //   .error(function(data, status, headers, config) {
+	      //     console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
+	      //   })
+	      // }
 
 	    vm.allHouses;
 
