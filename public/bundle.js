@@ -31373,10 +31373,10 @@
 
 	
 
-	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
 
-	// exports.baseUrl = 'http://localhost:3000'
+	exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31511,15 +31511,18 @@
 
 	        if (clickedValue == 'Complete') {
 	          completedGeoAddresses = result;
+	          console.log('COMPLETE');
 	          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
 	        }
 
 	        if (clickedValue == 'Constructing') {
 	          constructingGeoAddresses = result;
+	          console.log('CONSTRUCTING');
 	        }
 
 	        if (clickedValue == 'Future') {
 	          futureGeoAddresses = result;
+	          console.log('FUTURE');
 	        }
 
 	        mapObject.clearMarkers();
@@ -31593,7 +31596,7 @@
 	    // }
 
 	    vm.showSideCompleted = function(clickedValue, iconValue){
-
+	      console.log('SHOW SIDE COMPLETED HIT WITH : ');
 	      // POSSIBLE LOCAL STORAGE TECHNIQUE >>>>>
 	      // if ($window.localStorage.getItem('completedGeoAddresses')) {
 	        // var x = JSON.parse($window.localStorage.getItem('completedGeoAddresses'));
@@ -33589,10 +33592,21 @@
 	      }
 
 	      //  ADDD PICTURE FUNCTIONALITY
-	      vm.addPictures = function(file) {
-	        console.log("ADD PICTURES HIT WITH : ", file);
-	        $http.post(pictureRoute, file)
-	      }
+	      // vm.addPictures = function(file) {
+	      //   console.log("ADD PICTURES HIT WITH : ", file);
+	      //   $http.post(pictureRoute, file, {
+	      //     headers: {
+	      //       token: token
+	      //     }
+	      //   })
+	      //   .success(function(data, status, headers, config) {
+	      //
+	      //     console.log('ADDED PICTURES');
+	      //   })
+	      //   .error(function(data, status, headers, config) {
+	      //     console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
+	      //   })
+	      // }
 
 	    vm.allHouses;
 

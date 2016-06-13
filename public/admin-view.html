@@ -40,15 +40,6 @@
   <button type="submit" class="adminButtons" ng-click="adminCtrl.getHouseData()">Display Homes</button>
 </section>
 
-<section name="fileUploader" ng-show="adminCtrl.admin == true">
-  <!-- <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)"> -->
-    <form action="https://overbrook-server.herokuapp.com" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)">
-
-    <input type="file" name="fileField" value="upload">
-    <button type="submit" class="adminButtons" >upload file</button>
-  </form>
-</section>
-
 <section>
     <div ng-repeat="house in adminCtrl.allHouses">
       <ul>
@@ -57,6 +48,20 @@
       </ul>
       <button type="submit" class="adminButtons" ng-click="adminCtrl.updateHouse.rendered = house._id">update record</button>
       <button type="submit" class="adminButtons" ng-click="adminCtrl.deleteHouse(house._id, house.address)">delete record</button>
+
+      <section name="fileUploader" ng-show="adminCtrl.admin == true">
+        <!-- STAGING ___________________ -->
+        <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data" >
+        <!-- PRODUCTION ___________________________ -->
+          <!-- <form action="https://overbrook-server.herokuapp.com" method="POST" enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)"> -->
+
+          <input type="file" name="files[]" value="upload" multiple>
+          <input type="text" name="name" value="{{house._id}}">
+          <input type="text" name="housePrefix" value="">
+          <button type="submit" class="adminButtons" >upload file</button>
+        </form>
+      </section>
+
       <hr>
 
     <form name="updateHouseForm" class="updateHouseForm" ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
