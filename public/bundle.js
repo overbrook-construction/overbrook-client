@@ -31511,18 +31511,18 @@
 
 	        if (clickedValue == 'Complete') {
 	          completedGeoAddresses = result;
-	          console.log('COMOPLETED : ', completedGeoAddresses);
+	          console.log('COMPLETE');
 	          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
 	        }
 
 	        if (clickedValue == 'Constructing') {
 	          constructingGeoAddresses = result;
-	          console.log('CONSTRUCTING : ', constructingGeoAddresses);
+	          console.log('CONSTRUCTING');
 	        }
 
 	        if (clickedValue == 'Future') {
 	          futureGeoAddresses = result;
-	          console.log('FUTURE : ', futureGeoAddresses);
+	          console.log('FUTURE');
 	        }
 
 	        mapObject.clearMarkers();
@@ -31596,7 +31596,7 @@
 	    // }
 
 	    vm.showSideCompleted = function(clickedValue, iconValue){
-
+	      console.log('SHOW SIDE COMPLETED HIT WITH : ');
 	      // POSSIBLE LOCAL STORAGE TECHNIQUE >>>>>
 	      // if ($window.localStorage.getItem('completedGeoAddresses')) {
 	        // var x = JSON.parse($window.localStorage.getItem('completedGeoAddresses'));
