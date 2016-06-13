@@ -4,11 +4,31 @@ const angular = require('angular');
 require(__dirname + '/../gallery/gallery-controller');
 
 require(__dirname + '/../../ajax-service/data-service');
+require(__dirname + '/../../ajax-service/geo-service');
+
 
 angular.module('MapModule', ['AjaxService'])
-  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', function($http, $location, ajax, $controller, $window) {
+  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
     var vm = this;
+    
+    function resetToken() {
+      $window.localStorage.token = null;
+    }
+    resetToken();
+
+// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+    vm.getData = function() {
+      if ($window.localStorage.getItem('allHomeData')){
+        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+        data = yup
+      }
+      else {
+        ajax.getData();
+        vm.houseData = ajax.allHomeData;
+        data = ajax.allHomeData;
+      }
+    }
 
     vm.completeIcon = './media/complete-home.png';
     vm.constructionIcon = './media/construction-home.png';
@@ -52,18 +72,6 @@ angular.module('MapModule', ['AjaxService'])
     var data;
 
 
-    vm.getData = function() {
-      if ($window.localStorage){
-        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-        data = yup
-      }
-      else {
-
-      ajax.getData();
-      vm.houseData = ajax.allHomeData;
-      data = ajax.allHomeData;
-    }
-  }
 
     vm.clickedAddress = [];
     vm.geoArray = [];
@@ -92,18 +100,17 @@ angular.module('MapModule', ['AjaxService'])
 
         if (clickedValue == 'Complete') {
           completedGeoAddresses = result;
-          console.log('COMPLETE');
-          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
+          geo.completedGeoAddresses = result;
         }
 
         if (clickedValue == 'Constructing') {
           constructingGeoAddresses = result;
-          console.log('CONSTRUCTING');
+          geo.constructingGeoAddresses = result;
         }
 
         if (clickedValue == 'Future') {
           futureGeoAddresses = result;
-          console.log('FUTURE');
+          geo.futureGeoAddresses = result;
         }
 
         mapObject.clearMarkers();
@@ -172,18 +179,7 @@ angular.module('MapModule', ['AjaxService'])
       }
     }
 
-    // if (completedGeoAddresses.length) {
-    //   mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
-    // }
-
     vm.showSideCompleted = function(clickedValue, iconValue){
-      console.log('SHOW SIDE COMPLETED HIT WITH : ');
-      // POSSIBLE LOCAL STORAGE TECHNIQUE >>>>>
-      // if ($window.localStorage.getItem('completedGeoAddresses')) {
-        // var x = JSON.parse($window.localStorage.getItem('completedGeoAddresses'));
-        // console.log('GEO FROM LOCAL STORAGE : ', x[0].lat);
-      // }
-
       vm.clickedAddress = [];
       var icon;
       for (var key in data) {
@@ -192,17 +188,17 @@ angular.module('MapModule', ['AjaxService'])
           vm.clickedAddress.push(obj);
         }
       }
-      if (clickedValue == 'Complete' && completedGeoAddresses){
+      if (clickedValue == 'Complete' && geo.completedGeoAddresses){
         mapObject.clearMarkers();
-        mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
+        mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
       }
-      if (clickedValue == 'Constructing' && constructingGeoAddresses){
+      if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
         mapObject.clearMarkers();
-        mapObject.drawMarkers(constructingGeoAddresses, iconValue, vm.clickedAddress)
+        mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
       }
-      if (clickedValue == 'Future' && futureGeoAddresses){
+      if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
         mapObject.clearMarkers();
-        mapObject.drawMarkers(futureGeoAddresses, iconValue, vm.clickedAddress)
+        mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
       }
       else {
         geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);

@@ -3,7 +3,13 @@
 var constants = require(__dirname + '/../../constants');
 
 angular.module('ContactModule', [])
-.controller('contactController', ['$http', function($http) {
+.controller('contactController', ['$http', '$window', function($http, $window) {
+
+  function resetToken() {
+    $window.localStorage.token = null;
+  }
+  resetToken();
+
   var emailRoute = constants.baseUrl + '/email'
 
 

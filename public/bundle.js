@@ -49,16 +49,16 @@
 	const angular = __webpack_require__(1);
 
 	__webpack_require__(3);
-	__webpack_require__(7);
 	__webpack_require__(8);
 	__webpack_require__(9);
-	__webpack_require__(4);
 	__webpack_require__(10);
-	__webpack_require__(19);
-	__webpack_require__(20)
-	__webpack_require__(21);
-	__webpack_require__(23);
-	__webpack_require__(26);
+	__webpack_require__(4);
+	__webpack_require__(11);
+	__webpack_require__(20);
+	__webpack_require__(21)
+	__webpack_require__(22);
+	__webpack_require__(24);
+	__webpack_require__(27);
 
 
 /***/ },
@@ -31142,19 +31142,32 @@
 	'use strict';
 
 	__webpack_require__(5);
+	__webpack_require__(7);
 
-	angular.module('GalleryModule', ['AjaxService'])
-	  .controller('GalleryController', ['$location', 'ajax', '$window', function($location, ajax, $window) {
+	angular.module('GalleryModule', ['AjaxService', 'GeoService'])
+	  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', function($location, ajax, $window, geo) {
 
 	    var vm = this;
 	    vm.houseData;
-	    // var data = ajax.allHomeData;
 	    var data;
 
+	    function resetToken() {
+	      $window.localStorage.token = null;
+	    }
+	    resetToken();
 
+	// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+	    vm.getData = function() {
+	      if ($window.localStorage.getItem('allHomeData')) {
+	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+	        data = yup
+	      }
+	      else {
+	          ajax.getData();
+	      }
+	    }
 
-	    // BUTTON CLICKING FUNCTIONALITY ::
-
+	// BUTTON CLICKING FUNCTIONALITY
 	    vm.changeButtonColor = function(buttonClicked) {
 	      var count = 0;
 	      setColor(buttonClicked);
@@ -31176,26 +31189,12 @@
 	      }
 	    }
 
-	  vm.getData = function() {
-	    if ($window.localStorage){
-	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	      console.log('YUP IS : ', yup);
-	      data = yup
-	    }
-	    else {
-
-	    ajax.getData();
-	    vm.houseData = ajax.allHomeData;
-	  }
-	}
 
 	  vm.showInfo = false;
 
 
 	  vm.clickedHomePicArray = [];
 	  vm.clickedAddress = [];
-	  // vm.homePicArray = clickedHomePicArray;
-
 
 	  vm.showSideCompleted = function(clickedValue){
 	    vm.clickedHomePicArray = [];
@@ -31207,13 +31206,11 @@
 	        vm.clickedAddress.push(obj);
 	      }
 	    }
-	    // geoFunc(vm.clickedAddress, iconValue)
 	  }
 
 
 
 	  vm.changeStateFalse = function(){
-	    // console.log('CHANGE STATE IS BEING HIT');
 	    vm.showInfo = false;
 	  }
 
@@ -31228,14 +31225,12 @@
 	    }
 
 	    vm.runSingleData = function(id) {
-	      console.log('MAKING CHANGES TO CLIENT SERVER LUCY AND DAVID SITTIN IN A TREE')
 	      vm.singleHouseDataLoader(id);
 	    }
 
 	    vm.singleHouseDataLoader = function(id){
 	      var singleHomeData = {};
 	      for (var key in data) {
-	        console.log("MAKING CHANGES TO ONLY THE CLIENT SERVER !!!!!");
 	        var obj = data[key]
 	        if (data[key]._id == id) {
 	          // console.log('THIS IS THE MATCHING OBJECT', obj);
@@ -31256,36 +31251,6 @@
 	      }
 	    }
 	  }])
-
-	// USE A FACTORY OR SERVICE TO TRANSFER THE OBJECT BETWEEN THE GALLERY AND INFO VIEWS BASED ON CLICKED HOMES
-
-	// .factory('HomeFactory', function() {
-	//
-	//   this.singleHouseDataLoader = function(id){
-	//     console.log('ID SENT FROM VIEW : ', id + ' singleHomeDataLoader is called');
-	//     var singleHomeData = {};
-	//     for (var key in data) {
-	//       var obj = data[key]
-	//       if (data[key]._id == id) {
-	//         // console.log('THIS IS THE MATCHING OBJECT', obj);
-	//         singleHomeData.address = obj.address;
-	//         singleHomeData.sqft = obj.sqft;
-	//         singleHomeData.bedrooms = obj.bedrooms;
-	//         singleHomeData.bathrooms = obj.bathrooms;
-	//         singleHomeData.lotsize = obj.lotsize;
-	//         singleHomeData.schooldistrict = obj.schooldistrict;
-	//         singleHomeData.elementary = obj.elementary;
-	//         singleHomeData.middle = obj.middle;
-	//         singleHomeData.hs = obj.hs;
-	//         singleHomeData.status = obj.status;
-	//         singleHomeData.pics = obj.pics;
-	//         singleHomeData.mapPic = obj.pics[obj.pics.length-1];
-	//         singleHomeData.frontPic = obj.pics[0];
-	//       }
-	//     }
-	//   }
-	//   return singleHomeData
-	// })
 
 
 /***/ },
@@ -31355,7 +31320,6 @@
 	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
-	      // SAVE TO SESSION STORAGE
 
 	    }, function errorCallback(err) {
 		console.error(err);
@@ -31381,6 +31345,25 @@
 
 /***/ },
 /* 7 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var geoService = angular.module('GeoService', []);
+
+	geoService.factory('geo', [function () {
+	  var names = {
+	    completedGeoAddresses: [],
+	    constructingGeoAddresses: [],
+	    futureGeoAddresses: []
+	  };
+
+	  return names;
+	}])
+
+
+/***/ },
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31389,7 +31372,14 @@
 
 	angular.module('HomeModule', ['AjaxService'])
 
-	  .controller('HomeController', ['ajax', function(ajax) {
+	  .controller('HomeController', ['ajax', '$window', function(ajax, $window) {
+
+	  function resetToken() {
+	    $window.localStorage.token = null;
+	  }
+	  resetToken();
+
+
 
 	    this.talk = function() {
 	    ajax.sayName();
@@ -31402,19 +31392,22 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	'use strict';
 
 	angular.module('AboutModule', [])
-	  .controller('aboutController', function() {
-	    
-	  })
+	  .controller('aboutController', ['$window', function($window) {
+	    function resetToken() {
+	      $window.localStorage.token = null;
+	    }
+	    resetToken();
+	  }])
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31423,11 +31416,31 @@
 	__webpack_require__(4);
 
 	__webpack_require__(5);
+	__webpack_require__(7);
+
 
 	angular.module('MapModule', ['AjaxService'])
-	  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', function($http, $location, ajax, $controller, $window) {
+	  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
 	    var vm = this;
+	    
+	    function resetToken() {
+	      $window.localStorage.token = null;
+	    }
+	    resetToken();
+
+	// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+	    vm.getData = function() {
+	      if ($window.localStorage.getItem('allHomeData')){
+	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+	        data = yup
+	      }
+	      else {
+	        ajax.getData();
+	        vm.houseData = ajax.allHomeData;
+	        data = ajax.allHomeData;
+	      }
+	    }
 
 	    vm.completeIcon = './media/complete-home.png';
 	    vm.constructionIcon = './media/construction-home.png';
@@ -31471,18 +31484,6 @@
 	    var data;
 
 
-	    vm.getData = function() {
-	      if ($window.localStorage){
-	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	        data = yup
-	      }
-	      else {
-
-	      ajax.getData();
-	      vm.houseData = ajax.allHomeData;
-	      data = ajax.allHomeData;
-	    }
-	  }
 
 	    vm.clickedAddress = [];
 	    vm.geoArray = [];
@@ -31511,18 +31512,17 @@
 
 	        if (clickedValue == 'Complete') {
 	          completedGeoAddresses = result;
-	          console.log('COMPLETE');
-	          // $window.localStorage.setItem('completedGeoAddresses', JSON.stringify(result));
+	          geo.completedGeoAddresses = result;
 	        }
 
 	        if (clickedValue == 'Constructing') {
 	          constructingGeoAddresses = result;
-	          console.log('CONSTRUCTING');
+	          geo.constructingGeoAddresses = result;
 	        }
 
 	        if (clickedValue == 'Future') {
 	          futureGeoAddresses = result;
-	          console.log('FUTURE');
+	          geo.futureGeoAddresses = result;
 	        }
 
 	        mapObject.clearMarkers();
@@ -31591,18 +31591,7 @@
 	      }
 	    }
 
-	    // if (completedGeoAddresses.length) {
-	    //   mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
-	    // }
-
 	    vm.showSideCompleted = function(clickedValue, iconValue){
-	      console.log('SHOW SIDE COMPLETED HIT WITH : ');
-	      // POSSIBLE LOCAL STORAGE TECHNIQUE >>>>>
-	      // if ($window.localStorage.getItem('completedGeoAddresses')) {
-	        // var x = JSON.parse($window.localStorage.getItem('completedGeoAddresses'));
-	        // console.log('GEO FROM LOCAL STORAGE : ', x[0].lat);
-	      // }
-
 	      vm.clickedAddress = [];
 	      var icon;
 	      for (var key in data) {
@@ -31611,17 +31600,17 @@
 	          vm.clickedAddress.push(obj);
 	        }
 	      }
-	      if (clickedValue == 'Complete' && completedGeoAddresses){
+	      if (clickedValue == 'Complete' && geo.completedGeoAddresses){
 	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(completedGeoAddresses, iconValue, vm.clickedAddress)
+	        mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
 	      }
-	      if (clickedValue == 'Constructing' && constructingGeoAddresses){
+	      if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
 	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(constructingGeoAddresses, iconValue, vm.clickedAddress)
+	        mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
 	      }
-	      if (clickedValue == 'Future' && futureGeoAddresses){
+	      if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
 	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(futureGeoAddresses, iconValue, vm.clickedAddress)
+	        mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
 	      }
 	      else {
 	        geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
@@ -31632,74 +31621,71 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	// require(__dirname + '/../../ajax-service/data-service');
-	__webpack_require__(11);
+	__webpack_require__(12);
 
-	var url = __webpack_require__(12);
+	var url = __webpack_require__(13);
 
 	__webpack_require__(4);
 
 	angular.module('InfoModule', ['AjaxService', 'ngStorage'])
 	  .controller('InfoController', ['ajax', '$controller', '$window', function(ajax, $controller, $window) {
 
+	    // PARSING THE ID OUT OF THE URL
+	    var string = document.URL
+	    var newId = url.parse(string).hash
+	    var useId = newId.split('').splice(10, 25).join('');
+	    this.idUrl = useId;
 
-	  var data;
-
-
-	  this.getData = function() {
-	    if ($window.localStorage){
-	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	      data = yup
+	    function resetToken() {
+	      $window.localStorage.token = null;
 	    }
-	    else {
+	    resetToken();
 
-	    ajax.getData();
-	    data = ajax.allHomeData;
+	    var data;
+
+	    this.anFunc = function(){}
+
+	    this.getData = function(cb) {
+	      if ($window.localStorage.getItem('allHomeData')){
+	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+	        data = yup
+	        this.singleHouseDataLoader(useId, data)
+	      }
+	      else {
+	        ajax.getData();
+	        data = ajax.allHomeData;
+	    }
 	  }
-	}
 
-
-	  // this.getData = function(cb){
-	  //   ajax.getData();
-	  //   function cb(newData) {
-	  //     data = newData
-	  //   }
-	  //   cb(ajax.allHomeData)
-	  // }
+	  //   (function getIt() {
+	  //     return new Promise(function(resolve, reject) {
 	  //
-	  // data = ajax.allHomeData;
+	  //     ajax.getData();
+	  //     // data = ajax.allHomeData;
+	  //   resolve(data);
+	  // })
+	  //   // cb(useId, data)
+	  // })()
+	  // .then(function(result){
+	  //   data = JSON.parse($window.localStorage.getItem('allHomeData'))
+	  //   console.log(result);
+	  // })
 
-	  // PARSING THE ID OUT OF THE URL
-	  var string = document.URL
-	  var newId = url.parse(string).hash
-	  var useId = newId.split('').splice(10, 25).join('');
 
-	  this.idUrl = useId;
+
 
 	  this.singleHomeData = {};
 
 	  var frontPicture = [];
 	  this.frontPicture = frontPicture
 
-	  this.singleHouseDataLoader = function(useId){
-
-	    // IF LOCAL STORAGE HAS OBJECT THEN USE THIS OBJECT
-	    // if ($window.localStorage.homeData) {
-	    //   var retrievedObj = $window.localStorage.getItem('homeData');
-	    //   JSON.parse(retrievedObj);
-	    //   console.log('OBJECT FROM LOCAL STORAGE IS : ', retrievedObj.address);
-	    //   // this.singleHomeData.address = retrievedObj.address
-	    // }
-	    // else {
-
-	    // var singleHomeData = {};
-
-	    // FOR THE EDGE CASE !!! INSERT ANOTHER IF STATEMENT THAT CHECKS IF THE HOUSE WITH THAT ID IS UNDER CONSTRUCTION, IF IT IS THAN SET A FLAG TO ONLY LOAD A CERTAIN VIEW WITH CERTAIN DATA
+	  this.singleHouseDataLoader = function(useId, data){
 	    var nA = 'N/A';
 
 	    for (var key in data) {
@@ -31707,7 +31693,6 @@
 
 	      if (data[key]._id == useId) {
 	        if (obj.status == 'Future') {
-	          // console.log(document.getElementsByClassName('removeFuture'));
 	          var removeClass = document.getElementsByClassName('removeFuture');
 	          for (var i = 0; i < removeClass.length; i++) {
 	            removeClass[i].style.display = 'none';
@@ -31757,7 +31742,6 @@
 	          this.singleHomeData.lotSize = obj.lotSize;
 	        }
 
-	        // this.singleHomeData.lotSize = obj.lotSize;
 	        this.singleHomeData.schooldistrict = obj.schooldistrict;
 	        this.singleHomeData.elementary = obj.elementary;
 	        this.singleHomeData.middle = obj.middle;
@@ -31773,25 +31757,13 @@
 	      }
 	    }
 	  }
-	    // var newArray = [];
-	    // newArray.push(this.singleHomeData);
-	    // $window.localStorage.setItem('homeData', JSON.stringify(this.singleHomeData));
-	    // $window.localStorage.setItem('homeData', JSON.stringify(newArray));
+	}
 
-	  // }
-	    // // SAVE THIS DATA TO LOCAL STORAGE
-	    //   console.log('LOCAL STORAGE FUNCTION HAS BEEN HIT WITH : ' + homeObj);
-	      // $window.localStorage.homeData = this.singleHomeData;
-	      // $window.localStorage.
-
-
-	  }
-
-	  }])
+	}])
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -32018,7 +31990,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -32044,8 +32016,8 @@
 
 	'use strict';
 
-	var punycode = __webpack_require__(13);
-	var util = __webpack_require__(15);
+	var punycode = __webpack_require__(14);
+	var util = __webpack_require__(16);
 
 	exports.parse = urlParse;
 	exports.resolve = urlResolve;
@@ -32120,7 +32092,7 @@
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(16);
+	    querystring = __webpack_require__(17);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && util.isObject(url) && url instanceof Url) return url;
@@ -32756,7 +32728,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -33288,10 +33260,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(14)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module), (function() { return this; }())))
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -33307,7 +33279,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33329,17 +33301,17 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(17);
-	exports.encode = exports.stringify = __webpack_require__(18);
+	exports.decode = exports.parse = __webpack_require__(18);
+	exports.encode = exports.stringify = __webpack_require__(19);
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33425,7 +33397,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33495,7 +33467,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33503,7 +33475,13 @@
 	var constants = __webpack_require__(6);
 
 	angular.module('ContactModule', [])
-	.controller('contactController', ['$http', function($http) {
+	.controller('contactController', ['$http', '$window', function($http, $window) {
+
+	  function resetToken() {
+	    $window.localStorage.token = null;
+	  }
+	  resetToken();
+
 	  var emailRoute = constants.baseUrl + '/email'
 
 
@@ -33527,7 +33505,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33545,16 +33523,16 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var constants = __webpack_require__(6);
-	__webpack_require__(22);
+	__webpack_require__(23);
 
 	angular.module('AdminModule', [])
-	  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
+	  .controller('AdminController', ['$http', '$parse', '$window', '$scope', function($http, $parse, $window, $scope) {
 
 	    var vm = this;
 	    var token;
@@ -33592,20 +33570,25 @@
 	      }
 
 	      //  ADDD PICTURE FUNCTIONALITY
-	      // vm.addPictures = function(file) {
-	      //   console.log("ADD PICTURES HIT WITH : ", file);
-	      //   $http.post(pictureRoute, file, {
-	      //     headers: {
-	      //       token: token
-	      //     }
-	      //   })
-	      //   .success(function(data, status, headers, config) {
+	      // vm.addPictures = function(files) {
+	      //   console.log("ADD PICTURES HIT WITH : ", files);
 	      //
-	      //     console.log('ADDED PICTURES');
-	      //   })
-	      //   .error(function(data, status, headers, config) {
-	      //     console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-	      //   })
+	      //   var sam = $scope.myFile;
+	      //   console.log('SAM IS ', sam);
+	      //   var fd = new FormData();
+	      //   fd.append('file', files);
+	      //   // $http.post(pictureRoute, file, {
+	      //   //   headers: {
+	      //   //     token: token
+	      //   //   }
+	      //   // })
+	      //   // .success(function(data, status, headers, config) {
+	      //   //
+	      //   //   console.log('ADDED PICTURES');
+	      //   // })
+	      //   // .error(function(data, status, headers, config) {
+	      //   //   console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
+	      //   // })
 	      // }
 
 	    vm.allHouses;
@@ -33679,9 +33662,25 @@
 
 	  }])
 
+	//   .directive('fileModel', ['$parse', function ($parse) {
+	//     return {
+	//         restrict: 'A',
+	//         link: function(scope, element, attrs) {
+	//             var model = $parse(attrs.fileModel);
+	//             var modelSetter = model.assign;
+	//
+	//             element.bind('change', function(){
+	//                 scope.$apply(function(){
+	//                     modelSetter(scope, element[0].files[0]);
+	//                 });
+	//             });
+	//         }
+	//     };
+	// }]);
+
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var constants = __webpack_require__(6);
@@ -33734,12 +33733,12 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	angular.module('RouteModule', [__webpack_require__(24)])
+	angular.module('RouteModule', [__webpack_require__(25)])
 	  .config(['$routeProvider', function(route) {
 	    route
 	      .when('/home', {
@@ -33748,7 +33747,8 @@
 	        controllerAs: 'homeCtrl'
 	      })
 	      .when('/about', {
-	        templateUrl: './about-view.html'
+	        templateUrl: './about-view.html',
+	        controller: 'aboutController'
 	      })
 	      .when('/map', {
 	        templateUrl: './map-view.html',
@@ -33787,15 +33787,15 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(25);
+	__webpack_require__(26);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	/**
@@ -34833,7 +34833,7 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

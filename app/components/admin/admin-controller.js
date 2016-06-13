@@ -4,7 +4,7 @@ var constants = require(__dirname + '/../../constants');
 require('./auth_service');
 
 angular.module('AdminModule', [])
-  .controller('AdminController', ['$http', '$parse', '$window', function($http, $parse, $window) {
+  .controller('AdminController', ['$http', '$parse', '$window', '$scope', function($http, $parse, $window, $scope) {
 
     var vm = this;
     var token;
@@ -42,20 +42,25 @@ angular.module('AdminModule', [])
       }
 
       //  ADDD PICTURE FUNCTIONALITY
-      // vm.addPictures = function(file) {
-      //   console.log("ADD PICTURES HIT WITH : ", file);
-      //   $http.post(pictureRoute, file, {
-      //     headers: {
-      //       token: token
-      //     }
-      //   })
-      //   .success(function(data, status, headers, config) {
+      // vm.addPictures = function(files) {
+      //   console.log("ADD PICTURES HIT WITH : ", files);
       //
-      //     console.log('ADDED PICTURES');
-      //   })
-      //   .error(function(data, status, headers, config) {
-      //     console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-      //   })
+      //   var sam = $scope.myFile;
+      //   console.log('SAM IS ', sam);
+      //   var fd = new FormData();
+      //   fd.append('file', files);
+      //   // $http.post(pictureRoute, file, {
+      //   //   headers: {
+      //   //     token: token
+      //   //   }
+      //   // })
+      //   // .success(function(data, status, headers, config) {
+      //   //
+      //   //   console.log('ADDED PICTURES');
+      //   // })
+      //   // .error(function(data, status, headers, config) {
+      //   //   console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
+      //   // })
       // }
 
     vm.allHouses;
@@ -128,3 +133,19 @@ angular.module('AdminModule', [])
   }
 
   }])
+
+//   .directive('fileModel', ['$parse', function ($parse) {
+//     return {
+//         restrict: 'A',
+//         link: function(scope, element, attrs) {
+//             var model = $parse(attrs.fileModel);
+//             var modelSetter = model.assign;
+//
+//             element.bind('change', function(){
+//                 scope.$apply(function(){
+//                     modelSetter(scope, element[0].files[0]);
+//                 });
+//             });
+//         }
+//     };
+// }]);

@@ -1,19 +1,32 @@
 'use strict';
 
 require(__dirname + '/../../ajax-service/data-service');
+require(__dirname + '/../../ajax-service/geo-service');
 
-angular.module('GalleryModule', ['AjaxService'])
-  .controller('GalleryController', ['$location', 'ajax', '$window', function($location, ajax, $window) {
+angular.module('GalleryModule', ['AjaxService', 'GeoService'])
+  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', function($location, ajax, $window, geo) {
 
     var vm = this;
     vm.houseData;
-    // var data = ajax.allHomeData;
     var data;
 
+    function resetToken() {
+      $window.localStorage.token = null;
+    }
+    resetToken();
 
+// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+    vm.getData = function() {
+      if ($window.localStorage.getItem('allHomeData')) {
+        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+        data = yup
+      }
+      else {
+          ajax.getData();
+      }
+    }
 
-    // BUTTON CLICKING FUNCTIONALITY ::
-
+// BUTTON CLICKING FUNCTIONALITY
     vm.changeButtonColor = function(buttonClicked) {
       var count = 0;
       setColor(buttonClicked);
@@ -35,26 +48,12 @@ angular.module('GalleryModule', ['AjaxService'])
       }
     }
 
-  vm.getData = function() {
-    if ($window.localStorage){
-      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-      console.log('YUP IS : ', yup);
-      data = yup
-    }
-    else {
-
-    ajax.getData();
-    vm.houseData = ajax.allHomeData;
-  }
-}
 
   vm.showInfo = false;
 
 
   vm.clickedHomePicArray = [];
   vm.clickedAddress = [];
-  // vm.homePicArray = clickedHomePicArray;
-
 
   vm.showSideCompleted = function(clickedValue){
     vm.clickedHomePicArray = [];
@@ -66,13 +65,11 @@ angular.module('GalleryModule', ['AjaxService'])
         vm.clickedAddress.push(obj);
       }
     }
-    // geoFunc(vm.clickedAddress, iconValue)
   }
 
 
 
   vm.changeStateFalse = function(){
-    // console.log('CHANGE STATE IS BEING HIT');
     vm.showInfo = false;
   }
 
@@ -87,14 +84,12 @@ angular.module('GalleryModule', ['AjaxService'])
     }
 
     vm.runSingleData = function(id) {
-      console.log('MAKING CHANGES TO CLIENT SERVER LUCY AND DAVID SITTIN IN A TREE')
       vm.singleHouseDataLoader(id);
     }
 
     vm.singleHouseDataLoader = function(id){
       var singleHomeData = {};
       for (var key in data) {
-        console.log("MAKING CHANGES TO ONLY THE CLIENT SERVER !!!!!");
         var obj = data[key]
         if (data[key]._id == id) {
           // console.log('THIS IS THE MATCHING OBJECT', obj);
@@ -115,33 +110,3 @@ angular.module('GalleryModule', ['AjaxService'])
       }
     }
   }])
-
-// USE A FACTORY OR SERVICE TO TRANSFER THE OBJECT BETWEEN THE GALLERY AND INFO VIEWS BASED ON CLICKED HOMES
-
-// .factory('HomeFactory', function() {
-//
-//   this.singleHouseDataLoader = function(id){
-//     console.log('ID SENT FROM VIEW : ', id + ' singleHomeDataLoader is called');
-//     var singleHomeData = {};
-//     for (var key in data) {
-//       var obj = data[key]
-//       if (data[key]._id == id) {
-//         // console.log('THIS IS THE MATCHING OBJECT', obj);
-//         singleHomeData.address = obj.address;
-//         singleHomeData.sqft = obj.sqft;
-//         singleHomeData.bedrooms = obj.bedrooms;
-//         singleHomeData.bathrooms = obj.bathrooms;
-//         singleHomeData.lotsize = obj.lotsize;
-//         singleHomeData.schooldistrict = obj.schooldistrict;
-//         singleHomeData.elementary = obj.elementary;
-//         singleHomeData.middle = obj.middle;
-//         singleHomeData.hs = obj.hs;
-//         singleHomeData.status = obj.status;
-//         singleHomeData.pics = obj.pics;
-//         singleHomeData.mapPic = obj.pics[obj.pics.length-1];
-//         singleHomeData.frontPic = obj.pics[0];
-//       }
-//     }
-//   }
-//   return singleHomeData
-// })
