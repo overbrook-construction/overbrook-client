@@ -9,7 +9,8 @@ angular.module('RouteModule', [require('angular-route')])
         controllerAs: 'homeCtrl'
       })
       .when('/about', {
-        templateUrl: './about-view.html'
+        templateUrl: './about-view.html',
+        controller: 'aboutController'
       })
       .when('/map', {
         templateUrl: './map-view.html',
