@@ -216,7 +216,7 @@
     flex-direction: column; }
   #map {
     width: 100%;
-    height: 420px;
+    height: 430px;
     border: none; }
   .mapImg {
     background: url("../media/mapbg.jpg") no-repeat center center;
@@ -224,7 +224,7 @@
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
-    height: 667px;
+    height: 637px;
     margin-top: -16px; }
   .addressSidebar {
     flex-direction: column;
