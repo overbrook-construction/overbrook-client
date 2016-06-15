@@ -434,6 +434,18 @@
   margin: 10px;
 }
 
+.updateForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.updateForm input {
+  width: 400px;
+}
+
+.updateForm select {
+  width: 400px;
+}
 
 //FOOTER >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 .footer {
