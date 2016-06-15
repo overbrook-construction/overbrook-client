@@ -31423,7 +31423,7 @@
 	  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
 	    var vm = this;
-	    
+
 	    function resetToken() {
 	      $window.localStorage.token = null;
 	    }
@@ -31466,6 +31466,7 @@
 	  }
 
 	  function setColor(buttonClicked){
+	    console.log('SET COLOR HAS BEEN HIT');
 	    if (buttonClicked === 'Complete') {
 	      var buttonClicked;
 	      buttonClicked = 'completed';
@@ -31698,6 +31699,7 @@
 	            removeClass[i].style.display = 'none';
 	          }
 	          this.singleHomeData.address = obj.address;
+	          this.singleHomeData.beginDate = obj.beginDate;
 	          frontPicture.push(obj.pics[0]);
 	          if (obj.lotSize == null) {
 	            this.singleHomeData.lotSize = nA;
@@ -31744,7 +31746,7 @@
 
 	        this.singleHomeData.schooldistrict = obj.schooldistrict;
 	        this.singleHomeData.elementary = obj.elementary;
-	        this.singleHomeData.middle = obj.middle;
+	        this.singleHomeData.ms = obj.ms;
 	        this.singleHomeData.hs = obj.hs;
 	        this.singleHomeData.status = obj.status;
 	        this.singleHomeData.pics = obj.pics;

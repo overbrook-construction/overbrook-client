@@ -359,6 +359,16 @@
   padding: 10px;
   margin: 10px; }
 
+.updateForm {
+  display: flex;
+  flex-direction: column; }
+
+.updateForm input {
+  width: 400px; }
+
+.updateForm select {
+  width: 400px; }
+
 .footer {
   position: fixed;
   right: 0;
