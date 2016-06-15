@@ -254,7 +254,6 @@
     text-decoration: none; }
   .filterButtonDiv {
     display: inline-flex;
-    position: fixed;
     justify-content: center;
     background-color: white;
     width: 100%; }
