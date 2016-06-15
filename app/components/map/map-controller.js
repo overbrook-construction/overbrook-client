@@ -11,7 +11,7 @@ angular.module('MapModule', ['AjaxService'])
   .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
     var vm = this;
-    
+
     function resetToken() {
       $window.localStorage.token = null;
     }
@@ -54,6 +54,7 @@ angular.module('MapModule', ['AjaxService'])
   }
 
   function setColor(buttonClicked){
+    console.log('SET COLOR HAS BEEN HIT');
     if (buttonClicked === 'Complete') {
       var buttonClicked;
       buttonClicked = 'completed';

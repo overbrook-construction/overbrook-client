@@ -72,6 +72,7 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
             removeClass[i].style.display = 'none';
           }
           this.singleHomeData.address = obj.address;
+          this.singleHomeData.beginDate = obj.beginDate;
           frontPicture.push(obj.pics[0]);
           if (obj.lotSize == null) {
             this.singleHomeData.lotSize = nA;
@@ -118,7 +119,7 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
 
         this.singleHomeData.schooldistrict = obj.schooldistrict;
         this.singleHomeData.elementary = obj.elementary;
-        this.singleHomeData.middle = obj.middle;
+        this.singleHomeData.ms = obj.ms;
         this.singleHomeData.hs = obj.hs;
         this.singleHomeData.status = obj.status;
         this.singleHomeData.pics = obj.pics;
