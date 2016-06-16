@@ -51,10 +51,8 @@ angular.module('AdminModule', [])
         .success(function(data, status, headers, config) {
           vm.getHouseData();
           vm.resetForm('submitHouseForm');
-          console.log('ADDED HOUSE FROM ADMIN CTRL');
         })
         .error(function(data, status, headers, config) {
-          console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
         })
       }
 
@@ -68,7 +66,6 @@ angular.module('AdminModule', [])
           vm.allHouses = data;
         })
         .error(function(data, status, headers, config) {
-          console.log('CANNONT GET HOUSES');
         })
       }
 
@@ -83,7 +80,6 @@ angular.module('AdminModule', [])
           vm.resetForm('updateHouseForm');
         })
         .error(function(data, status, headers, config) {
-          console.log('CANNONT GET HOUSES');
         })
       }
 
@@ -97,10 +93,8 @@ angular.module('AdminModule', [])
             }
           }).success(function(data, status, headers, config) {
             vm.getHouseData();
-            console.log(house + ' HAS BEEN DELETED');
           })
           .error(function(data, status, headers, config) {
-            console.log('CANNOT DELETE HOUSES');
           })
         }
       }
