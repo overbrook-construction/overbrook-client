@@ -3,65 +3,64 @@
 
   <nav-directive></nav-directive>
 
+<!-- LOGIN FORM -->
+  <section ng-show="adminCtrl.admin == false" ng-init="adminCtrl.clearToken()">
+    <form class="adminLogin" name="loginForm" ng-submit="adminCtrl.login(admin)">
+      <input type="text" name="name" placeholder="username" ng-model="admin.username">
 
-<section ng-show="adminCtrl.admin == false" ng-init="adminCtrl.clearToken()">
-  <form class="adminLogin" name="loginForm" ng-submit="adminCtrl.login(admin)">
-    <input type="text" name="name" placeholder="username" ng-model="admin.username">
+      <input type="{{showpassword ? 'text' : 'password'}}" ng-model="admin.password">
 
-    <input type="{{showpassword ? 'text' : 'password'}}" ng-model="admin.password">
+      <input type="checkbox" ng-model="showpassword" ng-checked="false">
+      <button class="adminButtons" type="submit">Login</button>
 
-    <!-- <input type="password" name="name" placeholder="password" ng-model="admin.password"> -->
-    <input type="checkbox" ng-model="showpassword" ng-checked="false">
-    <button class="adminButtons" type="submit">Login</button>
+    </form>
+  </section>
 
-  </form>
-</section>
+<!-- DATA DISPLAYING AFTER LOGIN -->
+  <section ng-show="adminCtrl.admin == true">
+    <form name="submitHouseForm" class="submitHouseForm" ng-submit="adminCtrl.submitHouse(newHouse)">
+      <input type="text" name="name" placeholder="address" ng-model="newHouse.address">
+      <input type="number" name="name" placeholder="sqft" ng-model="newHouse.sqft">
+      <input type="number" name="name" placeholder="lotSize" ng-model="newHhstSize">
+      <input type="number" name="name" placeholder="bedrooms" ng-model="newHouse.bedrooms">
+      <input type="number" name="name" placeholder="baths" ng-model="newHouse.baths">
+      <input type="text" name="name" placeholder="elementary" ng-model="newHouse.elementary">
+      <input type="text" name="name" placeholder="ms" ng-model="newHouse.ms">
+      <input type="text" name="name" placeholder="hs" ng-model="newHouse.hs">
+      <span>Status :</span> <select name="name" ng-model="newHouse.status" required>
+        <option value="Complete">Complete</option>
+        <option value="Future">Future</option>
+        <option value="Constructing">Constructing</option>
+      </select>
+      <button type="submit" class="adminButtons" name="button">submit house</button>
+    </form>
+    <p>
+      <strong>Instructions for adding a new home:</strong><br>
+      1. Fill out all fields possible with house information.<br>
+      2. Click "submit house". <br>
+      <br>
+      <strong>Instructions for editing a new home:</strong><br>
+      1. Click "update record". <br>
+      2. Edit desired fields. <br>
+      3. Click "save changes". <br>
+      <br>
+      <strong>Instructions for adding pictures:</strong><br>
+      1. Before uploading phots, make a folder on you computer containing all desired photos for uploading.<br>
+      <br>
+      IMPORTANT: <br>
+      - Make sure that the first photo in your folder is your headlining photo (the photo you want users to see first).<br>
+      - Make sure that the map photo is the last photo inside the folder.<br>
+      - Make sure that all of you photos are of file type ".jpg" and are size 1024x664 pixels.<br>
+      2. Click "choose files".<br>
+      3. Highlight all photos inside your folder and click open.<br>
+      4. Enter in the "house number" in the house number field.<br>
+      5. Click "upload file".<br>
+      6. This will redirect you to a new page.  Close your browser and reopen Overbrookinc.com and view changes.
+    </p>
+    <button type="submit" class="adminButtons" ng-click="adminCtrl.getHouseData()">Display Homes</button>
+  </section>
 
-<section ng-show="adminCtrl.admin == true">
-  <form name="submitHouseForm" class="submitHouseForm" ng-submit="adminCtrl.submitHouse(newHouse)">
-    <input type="text" name="name" placeholder="address" ng-model="newHouse.address">
-    <input type="number" name="name" placeholder="sqft" ng-model="newHouse.sqft">
-    <input type="number" name="name" placeholder="lotSize" ng-model="newHhstSize">
-    <input type="number" name="name" placeholder="bedrooms" ng-model="newHouse.bedrooms">
-    <input type="number" name="name" placeholder="baths" ng-model="newHouse.baths">
-    <input type="text" name="name" placeholder="elementary" ng-model="newHouse.elementary">
-    <input type="text" name="name" placeholder="ms" ng-model="newHouse.ms">
-    <input type="text" name="name" placeholder="hs" ng-model="newHouse.hs">
-    <span>Status :</span> <select name="name" ng-model="newHouse.status" required>
-      <option value="Complete">Complete</option>
-      <option value="Future">Future</option>
-      <option value="Constructing">Constructing</option>
-    </select>
-    <button type="submit" class="adminButtons" name="button">submit house</button>
-  </form>
-  <p>
-    <strong>Instructions for adding a new home:</strong><br>
-    1. Fill out all fields possible with house information.<br>
-    2. Click "submit house". <br>
-    <br>
-    <strong>Instructions for editing a new home:</strong><br>
-    1. Click "update record". <br>
-    2. Edit desired fields. <br>
-    3. Click "save changes". <br>
-    <br>
-    <strong>Instructions for adding pictures:</strong><br>
-    1. Before uploading phots, make a folder on you computer containing all desired photos for uploading.<br>
-    <br>
-       IMPORTANT: <br>
-       - Make sure that the first photo in your folder is your headlining photo (the photo you want users to see first).<br>
-       - Make sure that the map photo is the last photo inside the folder.<br>
-       - Make sure that all of you photos are of file type ".jpg" and are size 1024x664 pixels.<br>
-    2. Click "choose files".<br>
-    3. Highlight all photos inside your folder and click open.<br>
-    4. Enter in the "house number" in the house number field.<br>
-    5. Click "upload file".<br>
-    6. This will redirect you to a new page.  Close your browser and reopen Overbrookinc.com and view changes.
-  </p>
-  <button type="submit" class="adminButtons" ng-click="adminCtrl.getHouseData()">Display Homes</button>
-</section>
-
-
-<section>
+  <section>
     <div ng-repeat="house in adminCtrl.allHouses">
       <ul>
         <li class="listItem">Address: {{house.address}}</li>
@@ -72,14 +71,11 @@
 
       <section name="fileUploader" ng-show="adminCtrl.admin == true">
         <!-- STAGING ___________________ -->
-        <!-- <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data"> -->
-
-          <!-- <form enctype="multipart/form-data" ng-submit="adminCtrl.addPictures(file)"> -->
-          <!-- POSSIBLY NEED TO ADD A DIRECTIVE -->
+        <form action="http://localhost:3000/picUpload" method="POST" enctype="multipart/form-data">
 
 
         <!-- PRODUCTION ___________________________ -->
-          <form action="https://overbrook-server.herokuapp.com/picUpload" method="POST" enctype="multipart/form-data">
+        <!-- <form action="https://overbrook-server.herokuapp.com/picUpload" method="POST" enctype="multipart/form-data"> -->
 
           <input type="file" name="files[]" value="upload" ng-model="file" file-model="myFile" multiple>
           <input type="text" name="name" value="{{house._id}}" readonly>
@@ -91,27 +87,27 @@
       <form name="updateHouseForm" class="updateHouseForm" ng-show="adminCtrl.updateHouse.rendered == house._id" ng-submit="adminCtrl.updateHouse.rendered = null">
         <div class="updateForm">
 
-        <span>address: </span><input type="text" ng-model="house.address">
-        <span>sqft: </span><input type="number" ng-model="house.sqft">
-        <span>lotsize: </span><input type="number" ng-model="house.lotsize">
-        <span>bedrooms: </span><input type="number" ng-model="house.bedrooms">
-        <span>baths: </span><input type="number" ng-model="house.baths">
-        <span>elementary: </span><input type="text" ng-model="house.elementary">
-        <span>ms: </span><input type="text" ng-model="house.ms">
-        <span>hs: </span><input type="text" ng-model="house.hs">
-        <span>Status :</span> <select name="name" ng-model="house.status" required>
-          <option value="Complete">Complete</option>
-          <option value="Future">Future</option>
-          <option value="Constructing">Constructing</option>
-        </select>
-      </div>
+          <span>address: </span><input type="text" ng-model="house.address">
+          <span>sqft: </span><input type="number" ng-model="house.sqft">
+          <span>lotsize: </span><input type="number" ng-model="house.lotsize">
+          <span>bedrooms: </span><input type="number" ng-model="house.bedrooms">
+          <span>baths: </span><input type="number" ng-model="house.baths">
+          <span>elementary: </span><input type="text" ng-model="house.elementary">
+          <span>ms: </span><input type="text" ng-model="house.ms">
+          <span>hs: </span><input type="text" ng-model="house.hs">
+          <span>Status :</span> <select name="name" ng-model="house.status" required>
+            <option value="Complete">Complete</option>
+            <option value="Future">Future</option>
+            <option value="Constructing">Constructing</option>
+          </select>
+        </div>
         <button type="submit" class="adminButtons" ng-click="adminCtrl.updateHouse(house)">save changes</button>
         <button type="reset" class="adminButtons" ng-click="adminCtrl.updateHouse = null; peopleCtrl.updateHouse.rendered = null">discard changes</button>
       </form>
       <hr>
 
-  </div>
+    </div>
 
-</section>
+  </section>
 
 </section>

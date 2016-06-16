@@ -5,22 +5,19 @@ var constants = require(__dirname + '/../../constants');
 angular.module('ContactModule', [])
 .controller('contactController', ['$http', '$window', function($http, $window) {
 
+  var emailRoute = constants.baseUrl + '/email'
+
   function resetToken() {
     $window.localStorage.token = null;
   }
   resetToken();
-
-  var emailRoute = constants.baseUrl + '/email'
-
 
   var emailForm = document.getElementsByName('emailForm')[0];
   this.resetForm = function(){
     emailForm.reset();
   }
 
-
   this.sendEmail = function(user) {
-    console.log('USER FROM FORM IS : ', user);
     $http.post(emailRoute, user)
     .success(function(data, status, headers, config) {
       console.log('SUCCESSFULL EMAIL FROM CONTROLLER');

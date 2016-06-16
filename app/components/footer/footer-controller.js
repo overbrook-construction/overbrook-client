@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('FooterModule', [])
-  .controller('FooterController', function() {
+.controller('FooterController', function() {
 
-  })
-  .directive('footerDirective', function() {
-    return{
-      restrict: 'E',
-      templateUrl: './footer-view.html'
-    }
-  });
+})
+.directive('footerDirective', function() {
+  return{
+    restrict: 'E',
+    templateUrl: './footer-view.html'
+  }
+});

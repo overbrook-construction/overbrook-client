@@ -31267,26 +31267,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
 	var constants = __webpack_require__(6);
 
 	var ajaxService = angular.module('AjaxService', []);
 
-	// RETRIEVING DATA FROM THE MLAB DATA BASE THIS IS THE NEW VERSION
+	// USING FACTORY TO GET DATA FROM MLAB AND PERSIST THROUGH CONTROLLERS
 	ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
 
 	  var adminRoute = constants.baseUrl + '/addHomes';
-	  // this.getHouseData = function() {
-	  //   console.log('GET REQUEST HAS BEEN RECEIVED');
-	  //   $http.get(adminRoute)
-	  //   .success(function(data, status, headers, config) {
-	  //     console.log('DATA FROM GET IS : ', data);
-	  //     allHouses.push(data);
-	  //     console.log(allHouses);
-	  //   })
-	  //   .error(function(data, status, headers, config) {
-	  //     console.log('CANNONT GET HOUSES');
-	  //   })
-	  // }
 
 	  var obj = {};
 
@@ -31296,20 +31285,18 @@
 	  }
 
 	  obj.getData = function(cb) {
-	    // console.log('GET DATA IS BEING HIT');
 	    $http.get(adminRoute)
 	    .then(function successCallback(response) {
-	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
 	      cb();
 
 	    }, function errorCallback(err) {
-		console.error(err);
+	        console.error(err);
 	    })
 	  }
 
-	return obj;
+	  return obj;
 
 	}])
 
@@ -31319,10 +31306,10 @@
 /***/ function(module, exports) {
 
 	
-
+	// PRODUCTION ROUTE >>>>>>>>>
 	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
-
+	// STAGING ROUTE >>>>>>>>
 	exports.baseUrl = 'http://localhost:3000'
 
 
@@ -31332,6 +31319,7 @@
 
 	'use strict';
 
+	// USING THIS SERVICE TO SAVE GEO LOCATIONS FOR PERSISTANCE BETWEEN PAGE CHANGES
 	var geoService = angular.module('GeoService', []);
 
 	geoService.factory('geo', [function () {
@@ -31369,7 +31357,7 @@
 
 	    }
 	    this.getData = function() {
-	      ajax.getData();
+	      ajax.getData(function(){});
 	    }
 	  }])
 
@@ -33476,22 +33464,19 @@
 	angular.module('ContactModule', [])
 	.controller('contactController', ['$http', '$window', function($http, $window) {
 
+	  var emailRoute = constants.baseUrl + '/email'
+
 	  function resetToken() {
 	    $window.localStorage.token = null;
 	  }
 	  resetToken();
-
-	  var emailRoute = constants.baseUrl + '/email'
-
 
 	  var emailForm = document.getElementsByName('emailForm')[0];
 	  this.resetForm = function(){
 	    emailForm.reset();
 	  }
 
-
 	  this.sendEmail = function(user) {
-	    console.log('USER FROM FORM IS : ', user);
 	    $http.post(emailRoute, user)
 	    .success(function(data, status, headers, config) {
 	      console.log('SUCCESSFULL EMAIL FROM CONTROLLER');
@@ -33510,15 +33495,15 @@
 	'use strict';
 
 	angular.module('FooterModule', [])
-	  .controller('FooterController', function() {
+	.controller('FooterController', function() {
 
-	  })
-	  .directive('footerDirective', function() {
-	    return{
-	      restrict: 'E',
-	      templateUrl: './footer-view.html'
-	    }
-	  });
+	})
+	.directive('footerDirective', function() {
+	  return{
+	    restrict: 'E',
+	    templateUrl: './footer-view.html'
+	  }
+	});
 
 
 /***/ },
@@ -33559,7 +33544,6 @@
 	          authorization: 'Basic ' + btoa(user.username + ':' + user.password)
 	        }})
 	        .then((res) => {
-	          // cb = cb || function() {};
 	          token = $window.localStorage.token = res.data.token;
 	          vm.admin = true;
 	          cb(null, res);
@@ -33568,114 +33552,72 @@
 	        })
 	      }
 
-	      //  ADDD PICTURE FUNCTIONALITY
-	      // vm.addPictures = function(files) {
-	      //   console.log("ADD PICTURES HIT WITH : ", files);
-	      //
-	      //   var sam = $scope.myFile;
-	      //   console.log('SAM IS ', sam);
-	      //   var fd = new FormData();
-	      //   fd.append('file', files);
-	      //   // $http.post(pictureRoute, file, {
-	      //   //   headers: {
-	      //   //     token: token
-	      //   //   }
-	      //   // })
-	      //   // .success(function(data, status, headers, config) {
-	      //   //
-	      //   //   console.log('ADDED PICTURES');
-	      //   // })
-	      //   // .error(function(data, status, headers, config) {
-	      //   //   console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-	      //   // })
-	      // }
+	      vm.allHouses;
 
-	    vm.allHouses;
+	      vm.submitHouse = function(newHouse) {
+	        $http.post(adminRoute, newHouse, {
+	          headers: {
+	            token: token
+	          }
+	        })
+	        .success(function(data, status, headers, config) {
+	          vm.getHouseData();
+	          vm.resetForm('submitHouseForm');
+	          console.log('ADDED HOUSE FROM ADMIN CTRL');
+	        })
+	        .error(function(data, status, headers, config) {
+	          console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
+	        })
+	      }
 
-	    vm.submitHouse = function(newHouse) {
-	      $http.post(adminRoute, newHouse, {
-	        headers: {
-	          token: token
+	      vm.getHouseData = function() {
+	        $http.get(adminRoute, {
+	          headers: {
+	            token: token
+	          }
+	        })
+	        .success(function(data, status, headers, config) {
+	          vm.allHouses = data;
+	        })
+	        .error(function(data, status, headers, config) {
+	          console.log('CANNONT GET HOUSES');
+	        })
+	      }
+
+	      vm.updateHouse = function(house) {
+	        vm.updateHouse.rendered = null;
+	        $http.put(adminRoute + '/' + house._id, house, {
+	          headers: {
+	            token: token
+	          }
+	        }).success(function(data, status, headers, config) {
+	          vm.getHouseData();
+	          vm.resetForm('updateHouseForm');
+	        })
+	        .error(function(data, status, headers, config) {
+	          console.log('CANNONT GET HOUSES');
+	        })
+	      }
+
+	      vm.deleteHouse = function(house, address) {
+	        var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
+	        if (answer) {
+
+	          $http.delete(adminRoute + '/' + house, {
+	            headers: {
+	              token: token
+	            }
+	          }).success(function(data, status, headers, config) {
+	            vm.getHouseData();
+	            console.log(house + ' HAS BEEN DELETED');
+	          })
+	          .error(function(data, status, headers, config) {
+	            console.log('CANNOT DELETE HOUSES');
+	          })
 	        }
-	      })
-	      .success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        vm.resetForm('submitHouseForm');
-
-	        console.log('ADDED HOUSE FROM ADMIN CTRL');
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-	      })
-	    }
-
-	    vm.getHouseData = function() {
-	      $http.get(adminRoute, {
-	        headers: {
-	          token: token
-	        }
-	      })
-	      .success(function(data, status, headers, config) {
-	        console.log('DATA FROM GET IS : ', data);
-	        // allHouses.push(data);
-	        vm.allHouses = data;
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('CANNONT GET HOUSES');
-	      })
-	    }
-
-	    vm.updateHouse = function(house) {
-	      console.log('UPDATATING LOT SIZE WITH : ', house);
-	      vm.updateHouse.rendered = null;
-	      $http.put(adminRoute + '/' + house._id, house, {
-	        headers: {
-	          token: token
-	        }
-	      }).success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        vm.resetForm('updateHouseForm');
-	      })
-	      .error(function(data, status, headers, config) {
-	              console.log('CANNONT GET HOUSES');
-	      })
-	    }
-
-	    vm.deleteHouse = function(house, address) {
-	      var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
-	      if (answer) {
-
-	      $http.delete(adminRoute + '/' + house, {
-	        headers: {
-	          token: token
-	        }
-	      }).success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        console.log(house + ' HAS BEEN DELETED');
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('CANNOT DELETE HOUSES');
-	      })
-	    }
-	  }
+	      }
 
 	  }])
-
-	//   .directive('fileModel', ['$parse', function ($parse) {
-	//     return {
-	//         restrict: 'A',
-	//         link: function(scope, element, attrs) {
-	//             var model = $parse(attrs.fileModel);
-	//             var modelSetter = model.assign;
-	//
-	//             element.bind('change', function(){
-	//                 scope.$apply(function(){
-	//                     modelSetter(scope, element[0].files[0]);
-	//                 });
-	//             });
-	//         }
-	//     };
-	// }]);
 
 
 /***/ },
@@ -33689,43 +33631,12 @@
 	    var token;
 	    var url = constants.baseUrl;
 	    var auth = {
-	      // createUser(user, cb) {
-	      //   cb || function() {};
-	      //   console.log('USER COMING IN : ', user);
-	      //   $http.post(url + '/addUser', user)
-	      //     .then((res) => {
-	      //       token = $window.localStorage.token = res.data.token;
-	      //       cb(null, res)
-	      //     }, (err) => {
-	      //       cb(err)
-	      //     })
-	      // },
+
+	      // SERVICE FOR GETTING TOKENS WHEN USING ADMIN FUNCTIONALITY
 	      getToken() {
 	        return token || $window.localStorage.token;
 	      }
-	    // signOut(cb) {
-	    //   // cb = cb || function() {}
-	    //   token = null;
-	    //   $window.localStorage.token = null;
-	    //   cb && cb();
-	    // },
-	    // signIn(user, cb) {
-	    //   console.log('AUTH SERVICE : SIGN IN HIT WITH : ', user);
-	    //   cb = cb || function() {};
-	    //   $http.get(url + '/signin', {
-	    //     headers: {
-	    //       authorization: 'Basic ' + btoa(user.username + ':' + user.password)
-	    //     }})
-	    //   .then((res) => {
-	    //     // cb = cb || function() {};
-	    //     token = $window.localStorage.token = res.data.token;
-	    //     console.log('AUTH SERVICE : TOKEN GEN : ', token);
-	    //     cb(null, res);
-	    //   }, (err) => {
-	    //     cb(err);
-	    //   })
-	    // }
-	  }
+	    }
 	    return auth;
 	  }])
 	}
@@ -34840,7 +34751,6 @@
 	const angular = __webpack_require__(1);
 
 	(function() {
-	  //INSERT MODULE NAMES IN ARRAY
 	  angular.module('App', ['RouteModule', 'NavModule', 'HomeModule', 'FooterModule', 'AboutModule', 'ContactModule', 'MapModule', 'GalleryModule', 'AdminModule', 'InfoModule'])
 	})();
 

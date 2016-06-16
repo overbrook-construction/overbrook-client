@@ -18,6 +18,6 @@ angular.module('HomeModule', ['AjaxService'])
 
     }
     this.getData = function() {
-      ajax.getData();
+      ajax.getData(function(){});
     }
   }])
