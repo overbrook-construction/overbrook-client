@@ -16,6 +16,10 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
     var useId = newId.split('').splice(10, 25).join('');
     this.idUrl = useId;
 
+    function reloadPage() {
+      $window.location.reload();
+    }
+
     function resetToken() {
       $window.localStorage.token = null;
     }
@@ -25,15 +29,18 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
 
     this.anFunc = function(){}
 
-    this.getData = function(cb) {
+    this.getData = function() {
       if ($window.localStorage.getItem('allHomeData')){
         var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
         data = yup
         this.singleHouseDataLoader(useId, data)
       }
       else {
-        ajax.getData();
-        data = ajax.allHomeData;
+        console.log('ELSE BLOCK HIT');
+        ajax.getData(function(){
+          data = ajax.allHomeData;
+          reloadPage();
+        });
     }
   }
 

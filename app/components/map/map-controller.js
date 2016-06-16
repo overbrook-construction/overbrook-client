@@ -12,6 +12,11 @@ angular.module('MapModule', ['AjaxService'])
 
     var vm = this;
 
+    vm.reloadPage = function() {
+      console.log('RELOAD HAS BEEN HIT');
+      $window.location.reload();
+    }
+
     function resetToken() {
       $window.localStorage.token = null;
     }
@@ -24,9 +29,11 @@ angular.module('MapModule', ['AjaxService'])
         data = yup
       }
       else {
-        ajax.getData();
-        vm.houseData = ajax.allHomeData;
-        data = ajax.allHomeData;
+        ajax.getData(function() {
+          vm.houseData = ajax.allHomeData;
+          data = ajax.allHomeData;
+          vm.reloadPage();
+        });
       }
     }
 

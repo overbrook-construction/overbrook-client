@@ -31151,6 +31151,11 @@
 	    vm.houseData;
 	    var data;
 
+	    vm.reloadPage = function() {
+	      console.log('RELOAD HAS BEEN HIT');
+	      $window.location.reload();
+	    }
+
 	    function resetToken() {
 	      $window.localStorage.token = null;
 	    }
@@ -31163,7 +31168,11 @@
 	        data = yup
 	      }
 	      else {
-	          ajax.getData();
+	          console.log('ELSE BLOCK HIT');
+	          ajax.getData(function(){
+	            vm.reloadPage();
+
+	          });
 	      }
 	    }
 
@@ -31262,33 +31271,6 @@
 
 	var ajaxService = angular.module('AjaxService', []);
 
-	// RETRIEVING DATA FROM JSON FILE THIS IS THE OLD VERSION
-	// ajaxService.factory('ajax', ['$http', function($http) {
-	//
-	//
-	//   var obj = {};
-	//
-	//   obj.allHomeData;
-	//
-	//   obj.sayName = function() {
-	//   }
-	//
-	//   obj.getData = function() {
-	//     // console.log('GET DATA IS BEING HIT');
-	//     $http.get('./data/new-home-data.json')
-	//     .then(function successCallback(response) {
-	//       // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
-	//       obj.allHomeData = response.data;
-	//       // SAVE TO SESSION STORAGE
-	//
-	//     }, function errorCallback(response) {
-	//     })
-	//   }
-	//
-	// return obj;
-	//
-	// }])
-
 	// RETRIEVING DATA FROM THE MLAB DATA BASE THIS IS THE NEW VERSION
 	ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
 
@@ -31313,13 +31295,14 @@
 	  obj.sayName = function() {
 	  }
 
-	  obj.getData = function() {
+	  obj.getData = function(cb) {
 	    // console.log('GET DATA IS BEING HIT');
 	    $http.get(adminRoute)
 	    .then(function successCallback(response) {
 	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
+	      cb();
 
 	    }, function errorCallback(err) {
 		console.error(err);
@@ -31337,10 +31320,10 @@
 
 	
 
-	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
 
-	// exports.baseUrl = 'http://localhost:3000'
+	exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31424,6 +31407,11 @@
 
 	    var vm = this;
 
+	    vm.reloadPage = function() {
+	      console.log('RELOAD HAS BEEN HIT');
+	      $window.location.reload();
+	    }
+
 	    function resetToken() {
 	      $window.localStorage.token = null;
 	    }
@@ -31436,9 +31424,11 @@
 	        data = yup
 	      }
 	      else {
-	        ajax.getData();
-	        vm.houseData = ajax.allHomeData;
-	        data = ajax.allHomeData;
+	        ajax.getData(function() {
+	          vm.houseData = ajax.allHomeData;
+	          data = ajax.allHomeData;
+	          vm.reloadPage();
+	        });
 	      }
 	    }
 
@@ -31643,6 +31633,10 @@
 	    var useId = newId.split('').splice(10, 25).join('');
 	    this.idUrl = useId;
 
+	    function reloadPage() {
+	      $window.location.reload();
+	    }
+
 	    function resetToken() {
 	      $window.localStorage.token = null;
 	    }
@@ -31652,15 +31646,18 @@
 
 	    this.anFunc = function(){}
 
-	    this.getData = function(cb) {
+	    this.getData = function() {
 	      if ($window.localStorage.getItem('allHomeData')){
 	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
 	        data = yup
 	        this.singleHouseDataLoader(useId, data)
 	      }
 	      else {
-	        ajax.getData();
-	        data = ajax.allHomeData;
+	        console.log('ELSE BLOCK HIT');
+	        ajax.getData(function(){
+	          data = ajax.allHomeData;
+	          reloadPage();
+	        });
 	    }
 	  }
 

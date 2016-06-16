@@ -10,6 +10,11 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
     vm.houseData;
     var data;
 
+    vm.reloadPage = function() {
+      console.log('RELOAD HAS BEEN HIT');
+      $window.location.reload();
+    }
+
     function resetToken() {
       $window.localStorage.token = null;
     }
@@ -22,7 +27,11 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
         data = yup
       }
       else {
-          ajax.getData();
+          console.log('ELSE BLOCK HIT');
+          ajax.getData(function(){
+            vm.reloadPage();
+
+          });
       }
     }
 
