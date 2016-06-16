@@ -412,16 +412,21 @@
   //FOOTER
   .footer {
     position: fixed;
+    width: 100%;
+    bottom: 0;
     text-align: center;
     background-color: #F0F0F0;
+    align-items: center;
     align-content: center;
-  }
-
-  .footerDiv {
-    align-content: center;
+    height: 20px;
+    margin: 0px 0px 0px 0px;
   }
 
   .footerText {
-    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    margin-top: 5px
   }
 }
