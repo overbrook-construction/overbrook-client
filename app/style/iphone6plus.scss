@@ -1,5 +1,5 @@
 @media only screen and (max-width : 414px) {
-  //NAVIGATION
+  // NAVIGATION
   nav {
     text-align: center;
   }
@@ -10,7 +10,7 @@
     width: 100%;
     height: 10%;
   }
-
+  // MAIN LOGO TEXT DIV
   .logoDiv {
     background-color: white;
     opacity: .8;
@@ -22,6 +22,7 @@
     align-items: center;
     vertical-align: center;
     margin-top: 16px;
+    // MAIN LOGO TEXT
     p {
       font-family: 'Tinos', serif;
       font-size: 23px;
@@ -32,7 +33,7 @@
       color: #414042;
     }
   }
-
+  // NAVIGATION TAB TEXT
   .navItem {
     text-decoration: none;
     color: #414042;
@@ -49,8 +50,8 @@
     font-family: 'Lato', sans-serif;
     margin-left: -20px;
   }
-
-  //HOME BACKGROUND IMAGE
+  // HOME PAGE
+  // HOME BACKGROUND IMAGE
   .homeImg {
     background: url('../media/7728-013.jpg') no-repeat center center;
     -webkit-background-size: cover;
@@ -62,7 +63,8 @@
     margin-top: -16px;
   }
 
-  //ABOUT
+  // ABOUT PAGE
+  // ABOUT PAGE BACKGROUND IMAGE
   .aboutImg {
     background: url('../media/8102-004.jpg') no-repeat center center;
     -webkit-background-size: cover;
@@ -73,6 +75,7 @@
     margin-top: -16px;
   }
 
+  // ABOUT PAGE TEXT DIV
   .aboutText {
     width: 100%;
     height: 590px;
@@ -80,6 +83,7 @@
     background-color: black;
     opacity: .8;
     overflow-y: scroll;
+    // ABOUT PAGE TEXT
     p {
       color: white;
       padding: 0px 20px 10px 20px;
@@ -90,96 +94,9 @@
     }
   }
 
-  //CONTACT
-  .contactImg {
-    background: url('../media/2434-016.jpg') no-repeat center center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    height: 730px;
-    margin-top: -16px;
-  }
 
-  .contactPage {
-    display: flex;
-  }
-
-  .contactText {
-    display: none;
-    width: 50%;
-    min-height: 630px;
-    margin-top: 0px;
-    background-color: black;
-    opacity: .8;
-    div p {
-      color: white;
-      padding-left: 80px;
-      padding-top: 30px;
-      padding-bottom: 0px;
-      color: white;
-      letter-spacing: 2px;
-      font-family: 'Lato', sans-serif;
-    }
-  }
-
-  .emailUs, .submitButton {
-    font-family: 'Lato', sans-serif;
-  }
-
-  .emailBox {
-    display: flex;
-    justify-content: center;
-    background-color: none;
-    width: 100%;
-  }
-
-  .emailForm {
-    align-self: center;
-    div {
-      width: 303px;
-      background-color: black;
-      opacity: .8;
-      color: white;
-      text-align: center;
-      font-family: sans-serif;
-      letter-spacing: 3px;
-      font-size: 20px;
-      padding: 1px 5px 1px 5px;
-      margin: 20px 0px 0px 0px;
-
-    }
-    input {
-      display: block;
-      padding: 10px 5px 10px 5px;
-      margin: 20px 0px 0px 0px;
-      width: 300px;
-      font-family: 'Lato', sans-serif;
-
-    }
-    textarea {
-      display: block;
-      padding: 10px 5px 10px 5px;
-      margin: 20px 0px 0px 0px;
-      width: 301px;
-      font-family: 'Lato', sans-serif;
-    }
-    button {
-      width: 312px;
-      padding: 10px 5px 10px 5px;
-      margin: 5px 0px 0px 0px;
-      background-color: black;
-      opacity: .8;
-      color: white
-    }
-  }
-
-  .contactIcon {
-    width: 30px;
-    height: auto;
-  }
-
-  //GALLERY
+  // GALLERY PAGE
+  // GALLERY PAGE BACKGROUND IMAGE
   .galleryImg {
     background: url('../media/defaultbg2.jpg') no-repeat center center;
     -webkit-background-size: cover;
@@ -189,7 +106,7 @@
     height: 730px;
     margin-top: -16px;
   }
-
+  // ALL
   .galleryWrapper {
     display: flex;
     flex-direction: column;
@@ -213,9 +130,8 @@
       margin-bottom: 0px;
       box-shadow: 3px 3px 3px gray;
   }
-
+  // INFO SIDE
   .galleryInfoMasterSection {
-    // text-align: center;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -227,12 +143,11 @@
     width: 90%;
     padding: 10px;
     margin-bottom: 0%;
-    // display: inline-flex;
     flex-direction: column;
     background-color: white;
     align-self: center;
   }
-
+  // IMAGE SIDE
   .infoImageContainer {
     width: 100%;
   }
@@ -241,7 +156,7 @@
     width: 100%;
     height: auto;
   }
-
+  // SLIDER
   .infoSliderContainer {
     height: 70px;
     width: 100%;
@@ -250,7 +165,7 @@
     overflow-y: hidden;
     white-space: nowrap;
   }
-
+  // IMAGES IN SLIDER
   .infoSliderImage {
     width: 70px;
     height: 50px;
@@ -404,19 +319,113 @@
     // margin: 0px 0px 0px 5px;
   }
 
+  //CONTACT
+  .contactImg {
+    background: url('../media/2434-016.jpg') no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 730px;
+    margin-top: -16px;
+  }
+
+  .contactPage {
+    display: flex;
+  }
+
+  .contactText {
+    display: none;
+    width: 50%;
+    min-height: 630px;
+    margin-top: 0px;
+    background-color: black;
+    opacity: .8;
+    div p {
+      color: white;
+      padding-left: 80px;
+      padding-top: 30px;
+      padding-bottom: 0px;
+      color: white;
+      letter-spacing: 2px;
+      font-family: 'Lato', sans-serif;
+    }
+  }
+
+  .emailUs, .submitButton {
+    font-family: 'Lato', sans-serif;
+  }
+
+  .emailBox {
+    display: flex;
+    justify-content: center;
+    background-color: none;
+    width: 100%;
+  }
+
+  .emailForm {
+    align-self: center;
+    div {
+      width: 303px;
+      background-color: black;
+      opacity: .8;
+      color: white;
+      text-align: center;
+      font-family: sans-serif;
+      letter-spacing: 3px;
+      font-size: 20px;
+      padding: 1px 5px 1px 5px;
+      margin: 20px 0px 0px 0px;
+
+    }
+    input {
+      display: block;
+      padding: 10px 5px 10px 5px;
+      margin: 20px 0px 0px 0px;
+      width: 300px;
+      font-family: 'Lato', sans-serif;
+
+    }
+    textarea {
+      display: block;
+      padding: 10px 5px 10px 5px;
+      margin: 20px 0px 0px 0px;
+      width: 301px;
+      font-family: 'Lato', sans-serif;
+    }
+    button {
+      width: 312px;
+      padding: 10px 5px 10px 5px;
+      margin: 5px 0px 0px 0px;
+      background-color: black;
+      opacity: .8;
+      color: white
+    }
+  }
+
+  .contactIcon {
+    width: 30px;
+    height: auto;
+  }
+
   //FOOTER
   .footer {
     position: fixed;
+    width: 100%;
+    bottom: 0;
     text-align: center;
     background-color: #F0F0F0;
+    align-items: center;
     align-content: center;
-  }
-
-  .footerDiv {
-    align-content: center;
+    height: 20px;
+    margin: 0px 0px 0px 0px;
   }
 
   .footerText {
-    font-family: 'Lato', sans-serif;
+    font-size: 10px;
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    margin-top: 5px
   }
 }
