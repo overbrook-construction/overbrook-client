@@ -27,11 +27,6 @@ angular.module('RouteModule', [require('angular-route')])
         controller: 'InfoController',
         controllerAs: 'infoCtrl'
       })
-      // .when('/info', {
-      //   templateUrl: './info-view.html',
-      //   controller: 'GalleryController',
-      //   controllerAs: 'galleryCtrl'
-      // })
       .when('/contact', {
         templateUrl: './contact-view.html',
         controller: 'contactController',

@@ -8,35 +8,41 @@ require(__dirname + '/../../ajax-service/geo-service');
 
 
 angular.module('MapModule', ['AjaxService'])
-  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
+.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
-    var vm = this;
+  var vm = this;
 
-    function resetToken() {
-      $window.localStorage.token = null;
+  vm.reloadPage = function() {
+    $window.location.reload();
+  }
+
+  function resetToken() {
+    $window.localStorage.token = null;
+  }
+  resetToken();
+
+  // CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+  vm.getData = function() {
+    if ($window.localStorage.getItem('allHomeData')){
+      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+      data = yup
     }
-    resetToken();
-
-// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
-    vm.getData = function() {
-      if ($window.localStorage.getItem('allHomeData')){
-        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-        data = yup
-      }
-      else {
-        ajax.getData();
+    else {
+      ajax.getData(function() {
         vm.houseData = ajax.allHomeData;
         data = ajax.allHomeData;
-      }
+        vm.reloadPage();
+      });
     }
+  }
 
-    vm.completeIcon = './media/complete-home.png';
-    vm.constructionIcon = './media/construction-home.png';
-    vm.futureIcon = './media/future-home.png';
+  vm.completeIcon = './media/complete-home.png';
+  vm.constructionIcon = './media/construction-home.png';
+  vm.futureIcon = './media/future-home.png';
 
-    // MAP OBJECT
-    var map = {};
-    vm.initMap = function() {
+  // MAP OBJECT
+  var map = {};
+  vm.initMap = function() {
     map.mapDiv = document.getElementById('map');
     map.googleMap = new google.maps.Map(map.mapDiv, {
       center: {lat: 47.629, lng: -122.211},
@@ -54,7 +60,6 @@ angular.module('MapModule', ['AjaxService'])
   }
 
   function setColor(buttonClicked){
-    console.log('SET COLOR HAS BEEN HIT');
     if (buttonClicked === 'Complete') {
       var buttonClicked;
       buttonClicked = 'completed';
@@ -70,13 +75,10 @@ angular.module('MapModule', ['AjaxService'])
     }
   }
 
-    var data;
-
-
-
-    vm.clickedAddress = [];
-    vm.geoArray = [];
-    vm.clickedPics = [];
+  var data;
+  vm.clickedAddress = [];
+  vm.geoArray = [];
+  vm.clickedPics = [];
 
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
   var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
@@ -87,123 +89,123 @@ angular.module('MapModule', ['AjaxService'])
 
       return new Promise(function(resolve, reject){
 
-          geocoder.geocode({'address': value.address}, function(results, status) {
-            if(status === google.maps.GeocoderStatus.OK) {
-              resolve(results[0].geometry.location);
-            }
-
-          })
-
-        })
-      })
-      Promise.all(promiseArray)
-      .then(function(result) {
-
-        if (clickedValue == 'Complete') {
-          completedGeoAddresses = result;
-          geo.completedGeoAddresses = result;
-        }
-
-        if (clickedValue == 'Constructing') {
-          constructingGeoAddresses = result;
-          geo.constructingGeoAddresses = result;
-        }
-
-        if (clickedValue == 'Future') {
-          futureGeoAddresses = result;
-          geo.futureGeoAddresses = result;
-        }
-
-        mapObject.clearMarkers();
-        mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
-      })
-      .catch(function(error){
-      })
-  }
-
-
-    var contentFig;
-    var homePic;
-
-    // MAP FUNCTIONALITY
-    var markers = [];
-    var mapObject = {
-      drawMarkers: function(geoArray, iconValue, objectArray) {
-        var setContent;
-        var infowindow = new google.maps.InfoWindow({
-          content: setContent
-        });
-
-        for (var i = 0; i < geoArray.length; i++) {
-
-          setContent = '<div id="popDiv">\
-          <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
-          <p class="popAddress">' + objectArray[i].address + '</p>\
-          <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
-          </div>';
-
-          var marker = new google.maps.Marker({
-            position: geoArray[i],
-            title: objectArray[i].address,
-            icon: iconValue
-          });
-
-
-          function closeInfo () {
-            infowindow.close();
+        geocoder.geocode({'address': value.address}, function(results, status) {
+          if(status === google.maps.GeocoderStatus.OK) {
+            resolve(results[0].geometry.location);
           }
 
-          (function(marker, setContent) {
-            marker.addListener('click', function() {
-              if(infowindow) {
-                closeInfo();
-              }
+        })
+
+      })
+    })
+    Promise.all(promiseArray)
+    .then(function(result) {
+
+      if (clickedValue == 'Complete') {
+        completedGeoAddresses = result;
+        geo.completedGeoAddresses = result;
+      }
+
+      if (clickedValue == 'Constructing') {
+        constructingGeoAddresses = result;
+        geo.constructingGeoAddresses = result;
+      }
+
+      if (clickedValue == 'Future') {
+        futureGeoAddresses = result;
+        geo.futureGeoAddresses = result;
+      }
+
+      mapObject.clearMarkers();
+      mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
+    })
+    .catch(function(error){
+    })
+  }
+
+  var contentFig;
+  var homePic;
+
+  // MAP FUNCTIONALITY
+  var markers = [];
+  var mapObject = {
+    drawMarkers: function(geoArray, iconValue, objectArray) {
+      var setContent;
+      var infowindow = new google.maps.InfoWindow({
+        content: setContent
+      });
+
+      for (var i = 0; i < geoArray.length; i++) {
+
+        setContent = '<div id="popDiv">\
+        <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
+        <p class="popAddress">' + objectArray[i].address + '</p>\
+        <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
+        </div>';
+
+        var marker = new google.maps.Marker({
+          position: geoArray[i],
+          title: objectArray[i].address,
+          icon: iconValue
+        });
+
+
+        function closeInfo () {
+          infowindow.close();
+        }
+
+        (function(marker, setContent) {
+          marker.addListener('click', function() {
+            if(infowindow) {
               closeInfo();
-              infowindow.close();
-              infowindow.setContent(setContent)
-              infowindow.open(map.googleMap, marker)
-            })
-          })(marker, setContent);
+            }
+            closeInfo();
+            infowindow.close();
+            infowindow.setContent(setContent)
+            infowindow.open(map.googleMap, marker)
+          })
+        })(marker, setContent);
 
-          markers.push(marker);
-        }
-        mapObject.setMapOnAll(map.googleMap);
-      },
-      setMapOnAll: function(map) {
-        for(var i = 0; i < markers.length; i++) {
-          markers[i].setMap(map)
-        }
-      },
-      clearMarkers: function() {
-        mapObject.setMapOnAll(null);
-        markers = [];
+        markers.push(marker);
+      }
+      mapObject.setMapOnAll(map.googleMap);
+    },
+    setMapOnAll: function(map) {
+      for(var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map)
+      }
+    },
+    clearMarkers: function() {
+      mapObject.setMapOnAll(null);
+      markers = [];
+    }
+  }
+
+// FIRST FUNCTION HIT THAT RUNS ALL MAP FUNCTIONALITY
+  vm.showSideCompleted = function(clickedValue, iconValue){
+    vm.clickedAddress = [];
+    var icon;
+    for (var key in data) {
+      var obj = data[key];
+      if(obj.status === clickedValue) {
+        vm.clickedAddress.push(obj);
       }
     }
-
-    vm.showSideCompleted = function(clickedValue, iconValue){
-      vm.clickedAddress = [];
-      var icon;
-      for (var key in data) {
-        var obj = data[key];
-        if(obj.status === clickedValue) {
-          vm.clickedAddress.push(obj);
-        }
-      }
-      if (clickedValue == 'Complete' && geo.completedGeoAddresses){
-        mapObject.clearMarkers();
-        mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
-      }
-      if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
-        mapObject.clearMarkers();
-        mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
-      }
-      if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
-        mapObject.clearMarkers();
-        mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
-      }
-      else {
-        geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
-      }
+    if (clickedValue == 'Complete' && geo.completedGeoAddresses){
+      mapObject.clearMarkers();
+      mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
     }
+    if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
+      mapObject.clearMarkers();
+      mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
+    }
+    if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
+      mapObject.clearMarkers();
+      mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
+    }
+    else {
+      geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
+    }
+  }
 
-  }])
+}])

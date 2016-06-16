@@ -31108,25 +31108,8 @@
 	angular.module('NavModule', [])
 	  .controller('navController', ['$controller', function($controller) {
 
-	      // // this.changeUp = $controller('GalleryController').changeState()
-	      //
-	      // var yup = $controller('GalleryController');
-	      //
-	      // // console.log(yup.changeState);
-	      //
-	      // // var yup = $controller('GalleryController');
-	      //
-	      // // this.changeUp = $controller('GalleryController').changeState();
-	      // // this.changeUp = yup.changeState();
-	      // // console.log(yup.changeState());
-
-	      // this.changeUp = function() {
-	      //   yup.changeState();
-	      // }
-
-
-
 	  }])
+	  
 	  .directive('navDirective', function() {
 	    return {
 	      restrict: 'E',
@@ -31151,6 +31134,11 @@
 	    vm.houseData;
 	    var data;
 
+	    vm.reloadPage = function() {
+	      console.log('RELOAD HAS BEEN HIT');
+	      $window.location.reload();
+	    }
+
 	    function resetToken() {
 	      $window.localStorage.token = null;
 	    }
@@ -31163,7 +31151,11 @@
 	        data = yup
 	      }
 	      else {
-	          ajax.getData();
+	          console.log('ELSE BLOCK HIT');
+	          ajax.getData(function(){
+	            vm.reloadPage();
+
+	          });
 	      }
 	    }
 
@@ -31258,53 +31250,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
 	var constants = __webpack_require__(6);
 
 	var ajaxService = angular.module('AjaxService', []);
 
-	// RETRIEVING DATA FROM JSON FILE THIS IS THE OLD VERSION
-	// ajaxService.factory('ajax', ['$http', function($http) {
-	//
-	//
-	//   var obj = {};
-	//
-	//   obj.allHomeData;
-	//
-	//   obj.sayName = function() {
-	//   }
-	//
-	//   obj.getData = function() {
-	//     // console.log('GET DATA IS BEING HIT');
-	//     $http.get('./data/new-home-data.json')
-	//     .then(function successCallback(response) {
-	//       // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
-	//       obj.allHomeData = response.data;
-	//       // SAVE TO SESSION STORAGE
-	//
-	//     }, function errorCallback(response) {
-	//     })
-	//   }
-	//
-	// return obj;
-	//
-	// }])
-
-	// RETRIEVING DATA FROM THE MLAB DATA BASE THIS IS THE NEW VERSION
+	// USING FACTORY TO GET DATA FROM MLAB AND PERSIST THROUGH CONTROLLERS
 	ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
 
 	  var adminRoute = constants.baseUrl + '/addHomes';
-	  // this.getHouseData = function() {
-	  //   console.log('GET REQUEST HAS BEEN RECEIVED');
-	  //   $http.get(adminRoute)
-	  //   .success(function(data, status, headers, config) {
-	  //     console.log('DATA FROM GET IS : ', data);
-	  //     allHouses.push(data);
-	  //     console.log(allHouses);
-	  //   })
-	  //   .error(function(data, status, headers, config) {
-	  //     console.log('CANNONT GET HOUSES');
-	  //   })
-	  // }
 
 	  var obj = {};
 
@@ -31313,20 +31267,19 @@
 	  obj.sayName = function() {
 	  }
 
-	  obj.getData = function() {
-	    // console.log('GET DATA IS BEING HIT');
+	  obj.getData = function(cb) {
 	    $http.get(adminRoute)
 	    .then(function successCallback(response) {
-	      // console.log('RESPONSE FROM HTTP GET DATA-SERVICE : ', response.data);
 	      obj.allHomeData = response.data;
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
+	      cb();
 
 	    }, function errorCallback(err) {
-		console.error(err);
+	        console.error(err);
 	    })
 	  }
 
-	return obj;
+	  return obj;
 
 	}])
 
@@ -31336,10 +31289,10 @@
 /***/ function(module, exports) {
 
 	
-
+	// PRODUCTION ROUTE >>>>>>>>>
 	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
-
+	// STAGING ROUTE >>>>>>>>
 	// exports.baseUrl = 'http://localhost:3000'
 
 
@@ -31349,6 +31302,7 @@
 
 	'use strict';
 
+	// USING THIS SERVICE TO SAVE GEO LOCATIONS FOR PERSISTANCE BETWEEN PAGE CHANGES
 	var geoService = angular.module('GeoService', []);
 
 	geoService.factory('geo', [function () {
@@ -31372,23 +31326,17 @@
 
 	angular.module('HomeModule', ['AjaxService'])
 
-	  .controller('HomeController', ['ajax', '$window', function(ajax, $window) {
+	.controller('HomeController', ['ajax', '$window', function(ajax, $window) {
 
 	  function resetToken() {
 	    $window.localStorage.token = null;
 	  }
 	  resetToken();
 
-
-
-	    this.talk = function() {
-	    ajax.sayName();
-
-	    }
-	    this.getData = function() {
-	      ajax.getData();
-	    }
-	  }])
+	  this.getData = function() {
+	    ajax.getData(function(){});
+	  }
+	}])
 
 
 /***/ },
@@ -31420,35 +31368,41 @@
 
 
 	angular.module('MapModule', ['AjaxService'])
-	  .controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
+	.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
 
-	    var vm = this;
+	  var vm = this;
 
-	    function resetToken() {
-	      $window.localStorage.token = null;
+	  vm.reloadPage = function() {
+	    $window.location.reload();
+	  }
+
+	  function resetToken() {
+	    $window.localStorage.token = null;
+	  }
+	  resetToken();
+
+	  // CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
+	  vm.getData = function() {
+	    if ($window.localStorage.getItem('allHomeData')){
+	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+	      data = yup
 	    }
-	    resetToken();
-
-	// CHECKING FOR DATA IN LOCAL STORAGE AND USING AJAX SERVICE IF IT INS'T THERE
-	    vm.getData = function() {
-	      if ($window.localStorage.getItem('allHomeData')){
-	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	        data = yup
-	      }
-	      else {
-	        ajax.getData();
+	    else {
+	      ajax.getData(function() {
 	        vm.houseData = ajax.allHomeData;
 	        data = ajax.allHomeData;
-	      }
+	        vm.reloadPage();
+	      });
 	    }
+	  }
 
-	    vm.completeIcon = './media/complete-home.png';
-	    vm.constructionIcon = './media/construction-home.png';
-	    vm.futureIcon = './media/future-home.png';
+	  vm.completeIcon = './media/complete-home.png';
+	  vm.constructionIcon = './media/construction-home.png';
+	  vm.futureIcon = './media/future-home.png';
 
-	    // MAP OBJECT
-	    var map = {};
-	    vm.initMap = function() {
+	  // MAP OBJECT
+	  var map = {};
+	  vm.initMap = function() {
 	    map.mapDiv = document.getElementById('map');
 	    map.googleMap = new google.maps.Map(map.mapDiv, {
 	      center: {lat: 47.629, lng: -122.211},
@@ -31466,7 +31420,6 @@
 	  }
 
 	  function setColor(buttonClicked){
-	    console.log('SET COLOR HAS BEEN HIT');
 	    if (buttonClicked === 'Complete') {
 	      var buttonClicked;
 	      buttonClicked = 'completed';
@@ -31482,13 +31435,10 @@
 	    }
 	  }
 
-	    var data;
-
-
-
-	    vm.clickedAddress = [];
-	    vm.geoArray = [];
-	    vm.clickedPics = [];
+	  var data;
+	  vm.clickedAddress = [];
+	  vm.geoArray = [];
+	  vm.clickedPics = [];
 
 	  //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
 	  var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
@@ -31499,126 +31449,126 @@
 
 	      return new Promise(function(resolve, reject){
 
-	          geocoder.geocode({'address': value.address}, function(results, status) {
-	            if(status === google.maps.GeocoderStatus.OK) {
-	              resolve(results[0].geometry.location);
-	            }
-
-	          })
-
-	        })
-	      })
-	      Promise.all(promiseArray)
-	      .then(function(result) {
-
-	        if (clickedValue == 'Complete') {
-	          completedGeoAddresses = result;
-	          geo.completedGeoAddresses = result;
-	        }
-
-	        if (clickedValue == 'Constructing') {
-	          constructingGeoAddresses = result;
-	          geo.constructingGeoAddresses = result;
-	        }
-
-	        if (clickedValue == 'Future') {
-	          futureGeoAddresses = result;
-	          geo.futureGeoAddresses = result;
-	        }
-
-	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
-	      })
-	      .catch(function(error){
-	      })
-	  }
-
-
-	    var contentFig;
-	    var homePic;
-
-	    // MAP FUNCTIONALITY
-	    var markers = [];
-	    var mapObject = {
-	      drawMarkers: function(geoArray, iconValue, objectArray) {
-	        var setContent;
-	        var infowindow = new google.maps.InfoWindow({
-	          content: setContent
-	        });
-
-	        for (var i = 0; i < geoArray.length; i++) {
-
-	          setContent = '<div id="popDiv">\
-	          <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
-	          <p class="popAddress">' + objectArray[i].address + '</p>\
-	          <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
-	          </div>';
-
-	          var marker = new google.maps.Marker({
-	            position: geoArray[i],
-	            title: objectArray[i].address,
-	            icon: iconValue
-	          });
-
-
-	          function closeInfo () {
-	            infowindow.close();
+	        geocoder.geocode({'address': value.address}, function(results, status) {
+	          if(status === google.maps.GeocoderStatus.OK) {
+	            resolve(results[0].geometry.location);
 	          }
 
-	          (function(marker, setContent) {
-	            marker.addListener('click', function() {
-	              if(infowindow) {
-	                closeInfo();
-	              }
+	        })
+
+	      })
+	    })
+	    Promise.all(promiseArray)
+	    .then(function(result) {
+
+	      if (clickedValue == 'Complete') {
+	        completedGeoAddresses = result;
+	        geo.completedGeoAddresses = result;
+	      }
+
+	      if (clickedValue == 'Constructing') {
+	        constructingGeoAddresses = result;
+	        geo.constructingGeoAddresses = result;
+	      }
+
+	      if (clickedValue == 'Future') {
+	        futureGeoAddresses = result;
+	        geo.futureGeoAddresses = result;
+	      }
+
+	      mapObject.clearMarkers();
+	      mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
+	    })
+	    .catch(function(error){
+	    })
+	  }
+
+	  var contentFig;
+	  var homePic;
+
+	  // MAP FUNCTIONALITY
+	  var markers = [];
+	  var mapObject = {
+	    drawMarkers: function(geoArray, iconValue, objectArray) {
+	      var setContent;
+	      var infowindow = new google.maps.InfoWindow({
+	        content: setContent
+	      });
+
+	      for (var i = 0; i < geoArray.length; i++) {
+
+	        setContent = '<div id="popDiv">\
+	        <img class="popPic" src=' + objectArray[i].pics[0] + ' />\
+	        <p class="popAddress">' + objectArray[i].address + '</p>\
+	        <a href="#/gallery/'+ objectArray[i]._id +'" class="viewDetailsButton" ng-click="mapCtrl.sayName()">View Details</a>\
+	        </div>';
+
+	        var marker = new google.maps.Marker({
+	          position: geoArray[i],
+	          title: objectArray[i].address,
+	          icon: iconValue
+	        });
+
+
+	        function closeInfo () {
+	          infowindow.close();
+	        }
+
+	        (function(marker, setContent) {
+	          marker.addListener('click', function() {
+	            if(infowindow) {
 	              closeInfo();
-	              infowindow.close();
-	              infowindow.setContent(setContent)
-	              infowindow.open(map.googleMap, marker)
-	            })
-	          })(marker, setContent);
+	            }
+	            closeInfo();
+	            infowindow.close();
+	            infowindow.setContent(setContent)
+	            infowindow.open(map.googleMap, marker)
+	          })
+	        })(marker, setContent);
 
-	          markers.push(marker);
-	        }
-	        mapObject.setMapOnAll(map.googleMap);
-	      },
-	      setMapOnAll: function(map) {
-	        for(var i = 0; i < markers.length; i++) {
-	          markers[i].setMap(map)
-	        }
-	      },
-	      clearMarkers: function() {
-	        mapObject.setMapOnAll(null);
-	        markers = [];
+	        markers.push(marker);
+	      }
+	      mapObject.setMapOnAll(map.googleMap);
+	    },
+	    setMapOnAll: function(map) {
+	      for(var i = 0; i < markers.length; i++) {
+	        markers[i].setMap(map)
+	      }
+	    },
+	    clearMarkers: function() {
+	      mapObject.setMapOnAll(null);
+	      markers = [];
+	    }
+	  }
+
+	// FIRST FUNCTION HIT THAT RUNS ALL MAP FUNCTIONALITY
+	  vm.showSideCompleted = function(clickedValue, iconValue){
+	    vm.clickedAddress = [];
+	    var icon;
+	    for (var key in data) {
+	      var obj = data[key];
+	      if(obj.status === clickedValue) {
+	        vm.clickedAddress.push(obj);
 	      }
 	    }
-
-	    vm.showSideCompleted = function(clickedValue, iconValue){
-	      vm.clickedAddress = [];
-	      var icon;
-	      for (var key in data) {
-	        var obj = data[key];
-	        if(obj.status === clickedValue) {
-	          vm.clickedAddress.push(obj);
-	        }
-	      }
-	      if (clickedValue == 'Complete' && geo.completedGeoAddresses){
-	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
-	      }
-	      if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
-	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
-	      }
-	      if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
-	        mapObject.clearMarkers();
-	        mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
-	      }
-	      else {
-	        geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
-	      }
+	    if (clickedValue == 'Complete' && geo.completedGeoAddresses){
+	      mapObject.clearMarkers();
+	      mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
 	    }
+	    if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
+	      mapObject.clearMarkers();
+	      mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
+	    }
+	    if (clickedValue == 'Future' && geo.futureGeoAddresses.length){
+	      mapObject.clearMarkers();
+	      mapObject.drawMarkers(geo.futureGeoAddresses, iconValue, vm.clickedAddress)
+	    }
+	    else {
+	      geoFunc(vm.clickedAddress, iconValue, function(){}, clickedValue);
+	    }
+	  }
 
-	  }])
+	}])
 
 
 /***/ },
@@ -31627,59 +31577,45 @@
 
 	'use strict';
 
-	// require(__dirname + '/../../ajax-service/data-service');
 	__webpack_require__(12);
-
 	var url = __webpack_require__(13);
-
 	__webpack_require__(4);
 
 	angular.module('InfoModule', ['AjaxService', 'ngStorage'])
-	  .controller('InfoController', ['ajax', '$controller', '$window', function(ajax, $controller, $window) {
+	.controller('InfoController', ['ajax', '$controller', '$window', function(ajax, $controller, $window) {
 
-	    // PARSING THE ID OUT OF THE URL
-	    var string = document.URL
-	    var newId = url.parse(string).hash
-	    var useId = newId.split('').splice(10, 25).join('');
-	    this.idUrl = useId;
+	  // PARSING THE ID OUT OF THE URL
+	  var string = document.URL
+	  var newId = url.parse(string).hash
+	  var useId = newId.split('').splice(10, 25).join('');
+	  this.idUrl = useId;
 
-	    function resetToken() {
-	      $window.localStorage.token = null;
-	    }
-	    resetToken();
+	  var data;
 
-	    var data;
-
-	    this.anFunc = function(){}
-
-	    this.getData = function(cb) {
-	      if ($window.localStorage.getItem('allHomeData')){
-	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
-	        data = yup
-	        this.singleHouseDataLoader(useId, data)
-	      }
-	      else {
-	        ajax.getData();
-	        data = ajax.allHomeData;
-	    }
+	  function reloadPage() {
+	    $window.location.reload();
 	  }
 
-	  //   (function getIt() {
-	  //     return new Promise(function(resolve, reject) {
-	  //
-	  //     ajax.getData();
-	  //     // data = ajax.allHomeData;
-	  //   resolve(data);
-	  // })
-	  //   // cb(useId, data)
-	  // })()
-	  // .then(function(result){
-	  //   data = JSON.parse($window.localStorage.getItem('allHomeData'))
-	  //   console.log(result);
-	  // })
+	  function resetToken() {
+	    $window.localStorage.token = null;
+	  }
+	  resetToken();
 
+	  this.anFunc = function(){}
 
-
+	  this.getData = function() {
+	    if ($window.localStorage.getItem('allHomeData')){
+	      var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+	      data = yup
+	      this.singleHouseDataLoader(useId, data)
+	    }
+	    else {
+	      ajax.getData(function(){
+	        data = ajax.allHomeData;
+	        reloadPage();
+	      });
+	    }
+	  }
 
 	  this.singleHomeData = {};
 
@@ -31715,51 +31651,51 @@
 	            removeSlider[0].style.display = 'none';
 	          }
 
-	        this.singleHomeData.address = obj.address;
-	        if (obj.sqft == null) {
-	          this.singleHomeData.sqft = nA;
-	        }
-	        else {
-	          this.singleHomeData.sqft = obj.sqft;
-	        }
+	          this.singleHomeData.address = obj.address;
+	          if (obj.sqft == null) {
+	            this.singleHomeData.sqft = nA;
+	          }
+	          else {
+	            this.singleHomeData.sqft = obj.sqft;
+	          }
 
-	        if (obj.bedrooms == null) {
-	          this.singleHomeData.bedrooms = nA;
-	        }
-	        else {
-	        this.singleHomeData.bedrooms = obj.bedrooms;
-	        }
+	          if (obj.bedrooms == null) {
+	            this.singleHomeData.bedrooms = nA;
+	          }
+	          else {
+	            this.singleHomeData.bedrooms = obj.bedrooms;
+	          }
 
-	        if (obj.baths == null) {
-	          this.singleHomeData.baths = nA;
-	        }
-	        else {
-	          this.singleHomeData.baths = obj.baths;
-	        }
+	          if (obj.baths == null) {
+	            this.singleHomeData.baths = nA;
+	          }
+	          else {
+	            this.singleHomeData.baths = obj.baths;
+	          }
 
-	        if (obj.lotSize == null || undefined) {
-	          this.singleHomeData.lotSize = nA;
-	        }
-	        else {
-	          this.singleHomeData.lotSize = obj.lotSize;
-	        }
+	          if (obj.lotSize == null || undefined) {
+	            this.singleHomeData.lotSize = nA;
+	          }
+	          else {
+	            this.singleHomeData.lotSize = obj.lotSize;
+	          }
 
-	        this.singleHomeData.schooldistrict = obj.schooldistrict;
-	        this.singleHomeData.elementary = obj.elementary;
-	        this.singleHomeData.ms = obj.ms;
-	        this.singleHomeData.hs = obj.hs;
-	        this.singleHomeData.status = obj.status;
-	        this.singleHomeData.pics = obj.pics;
-	        this.singleHomeData.mapPic = obj.pics[obj.pics.length-1];
-	        frontPicture.push(obj.pics[0]);
-	        this.singleHomeData.changePic = function(key, value) {
-	          frontPicture.pop();
-	          frontPicture.push(value);
+	          this.singleHomeData.schooldistrict = obj.schooldistrict;
+	          this.singleHomeData.elementary = obj.elementary;
+	          this.singleHomeData.ms = obj.ms;
+	          this.singleHomeData.hs = obj.hs;
+	          this.singleHomeData.status = obj.status;
+	          this.singleHomeData.pics = obj.pics;
+	          this.singleHomeData.mapPic = obj.pics[obj.pics.length-1];
+	          frontPicture.push(obj.pics[0]);
+	          this.singleHomeData.changePic = function(key, value) {
+	            frontPicture.pop();
+	            frontPicture.push(value);
+	          }
 	        }
 	      }
 	    }
 	  }
-	}
 
 	}])
 
@@ -33479,22 +33415,19 @@
 	angular.module('ContactModule', [])
 	.controller('contactController', ['$http', '$window', function($http, $window) {
 
+	  var emailRoute = constants.baseUrl + '/email'
+
 	  function resetToken() {
 	    $window.localStorage.token = null;
 	  }
 	  resetToken();
-
-	  var emailRoute = constants.baseUrl + '/email'
-
 
 	  var emailForm = document.getElementsByName('emailForm')[0];
 	  this.resetForm = function(){
 	    emailForm.reset();
 	  }
 
-
 	  this.sendEmail = function(user) {
-	    console.log('USER FROM FORM IS : ', user);
 	    $http.post(emailRoute, user)
 	    .success(function(data, status, headers, config) {
 	      console.log('SUCCESSFULL EMAIL FROM CONTROLLER');
@@ -33513,15 +33446,15 @@
 	'use strict';
 
 	angular.module('FooterModule', [])
-	  .controller('FooterController', function() {
+	.controller('FooterController', function() {
 
-	  })
-	  .directive('footerDirective', function() {
-	    return{
-	      restrict: 'E',
-	      templateUrl: './footer-view.html'
-	    }
-	  });
+	})
+	.directive('footerDirective', function() {
+	  return{
+	    restrict: 'E',
+	    templateUrl: './footer-view.html'
+	  }
+	});
 
 
 /***/ },
@@ -33562,7 +33495,6 @@
 	          authorization: 'Basic ' + btoa(user.username + ':' + user.password)
 	        }})
 	        .then((res) => {
-	          // cb = cb || function() {};
 	          token = $window.localStorage.token = res.data.token;
 	          vm.admin = true;
 	          cb(null, res);
@@ -33571,114 +33503,66 @@
 	        })
 	      }
 
-	      //  ADDD PICTURE FUNCTIONALITY
-	      // vm.addPictures = function(files) {
-	      //   console.log("ADD PICTURES HIT WITH : ", files);
-	      //
-	      //   var sam = $scope.myFile;
-	      //   console.log('SAM IS ', sam);
-	      //   var fd = new FormData();
-	      //   fd.append('file', files);
-	      //   // $http.post(pictureRoute, file, {
-	      //   //   headers: {
-	      //   //     token: token
-	      //   //   }
-	      //   // })
-	      //   // .success(function(data, status, headers, config) {
-	      //   //
-	      //   //   console.log('ADDED PICTURES');
-	      //   // })
-	      //   // .error(function(data, status, headers, config) {
-	      //   //   console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-	      //   // })
-	      // }
+	      vm.allHouses;
 
-	    vm.allHouses;
+	      vm.submitHouse = function(newHouse) {
+	        $http.post(adminRoute, newHouse, {
+	          headers: {
+	            token: token
+	          }
+	        })
+	        .success(function(data, status, headers, config) {
+	          vm.getHouseData();
+	          vm.resetForm('submitHouseForm');
+	        })
+	        .error(function(data, status, headers, config) {
+	        })
+	      }
 
-	    vm.submitHouse = function(newHouse) {
-	      $http.post(adminRoute, newHouse, {
-	        headers: {
-	          token: token
+	      vm.getHouseData = function() {
+	        $http.get(adminRoute, {
+	          headers: {
+	            token: token
+	          }
+	        })
+	        .success(function(data, status, headers, config) {
+	          vm.allHouses = data;
+	        })
+	        .error(function(data, status, headers, config) {
+	        })
+	      }
+
+	      vm.updateHouse = function(house) {
+	        vm.updateHouse.rendered = null;
+	        $http.put(adminRoute + '/' + house._id, house, {
+	          headers: {
+	            token: token
+	          }
+	        }).success(function(data, status, headers, config) {
+	          vm.getHouseData();
+	          vm.resetForm('updateHouseForm');
+	        })
+	        .error(function(data, status, headers, config) {
+	        })
+	      }
+
+	      vm.deleteHouse = function(house, address) {
+	        var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
+	        if (answer) {
+
+	          $http.delete(adminRoute + '/' + house, {
+	            headers: {
+	              token: token
+	            }
+	          }).success(function(data, status, headers, config) {
+	            vm.getHouseData();
+	          })
+	          .error(function(data, status, headers, config) {
+	          })
 	        }
-	      })
-	      .success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        vm.resetForm('submitHouseForm');
-
-	        console.log('ADDED HOUSE FROM ADMIN CTRL');
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('ERROR SAVING HOUSE FROM ADMIN CTRL');
-	      })
-	    }
-
-	    vm.getHouseData = function() {
-	      $http.get(adminRoute, {
-	        headers: {
-	          token: token
-	        }
-	      })
-	      .success(function(data, status, headers, config) {
-	        console.log('DATA FROM GET IS : ', data);
-	        // allHouses.push(data);
-	        vm.allHouses = data;
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('CANNONT GET HOUSES');
-	      })
-	    }
-
-	    vm.updateHouse = function(house) {
-	      console.log('UPDATATING LOT SIZE WITH : ', house);
-	      vm.updateHouse.rendered = null;
-	      $http.put(adminRoute + '/' + house._id, house, {
-	        headers: {
-	          token: token
-	        }
-	      }).success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        vm.resetForm('updateHouseForm');
-	      })
-	      .error(function(data, status, headers, config) {
-	              console.log('CANNONT GET HOUSES');
-	      })
-	    }
-
-	    vm.deleteHouse = function(house, address) {
-	      var answer = window.confirm('Are you sure you want to delete the home with address : ' + address);
-	      if (answer) {
-
-	      $http.delete(adminRoute + '/' + house, {
-	        headers: {
-	          token: token
-	        }
-	      }).success(function(data, status, headers, config) {
-	        vm.getHouseData();
-	        console.log(house + ' HAS BEEN DELETED');
-	      })
-	      .error(function(data, status, headers, config) {
-	        console.log('CANNOT DELETE HOUSES');
-	      })
-	    }
-	  }
+	      }
 
 	  }])
-
-	//   .directive('fileModel', ['$parse', function ($parse) {
-	//     return {
-	//         restrict: 'A',
-	//         link: function(scope, element, attrs) {
-	//             var model = $parse(attrs.fileModel);
-	//             var modelSetter = model.assign;
-	//
-	//             element.bind('change', function(){
-	//                 scope.$apply(function(){
-	//                     modelSetter(scope, element[0].files[0]);
-	//                 });
-	//             });
-	//         }
-	//     };
-	// }]);
 
 
 /***/ },
@@ -33692,43 +33576,12 @@
 	    var token;
 	    var url = constants.baseUrl;
 	    var auth = {
-	      // createUser(user, cb) {
-	      //   cb || function() {};
-	      //   console.log('USER COMING IN : ', user);
-	      //   $http.post(url + '/addUser', user)
-	      //     .then((res) => {
-	      //       token = $window.localStorage.token = res.data.token;
-	      //       cb(null, res)
-	      //     }, (err) => {
-	      //       cb(err)
-	      //     })
-	      // },
+
+	      // SERVICE FOR GETTING TOKENS WHEN USING ADMIN FUNCTIONALITY
 	      getToken() {
 	        return token || $window.localStorage.token;
 	      }
-	    // signOut(cb) {
-	    //   // cb = cb || function() {}
-	    //   token = null;
-	    //   $window.localStorage.token = null;
-	    //   cb && cb();
-	    // },
-	    // signIn(user, cb) {
-	    //   console.log('AUTH SERVICE : SIGN IN HIT WITH : ', user);
-	    //   cb = cb || function() {};
-	    //   $http.get(url + '/signin', {
-	    //     headers: {
-	    //       authorization: 'Basic ' + btoa(user.username + ':' + user.password)
-	    //     }})
-	    //   .then((res) => {
-	    //     // cb = cb || function() {};
-	    //     token = $window.localStorage.token = res.data.token;
-	    //     console.log('AUTH SERVICE : TOKEN GEN : ', token);
-	    //     cb(null, res);
-	    //   }, (err) => {
-	    //     cb(err);
-	    //   })
-	    // }
-	  }
+	    }
 	    return auth;
 	  }])
 	}
@@ -33767,11 +33620,6 @@
 	        controller: 'InfoController',
 	        controllerAs: 'infoCtrl'
 	      })
-	      // .when('/info', {
-	      //   templateUrl: './info-view.html',
-	      //   controller: 'GalleryController',
-	      //   controllerAs: 'galleryCtrl'
-	      // })
 	      .when('/contact', {
 	        templateUrl: './contact-view.html',
 	        controller: 'contactController',
@@ -34843,7 +34691,6 @@
 	const angular = __webpack_require__(1);
 
 	(function() {
-	  //INSERT MODULE NAMES IN ARRAY
 	  angular.module('App', ['RouteModule', 'NavModule', 'HomeModule', 'FooterModule', 'AboutModule', 'ContactModule', 'MapModule', 'GalleryModule', 'AdminModule', 'InfoModule'])
 	})();
 
