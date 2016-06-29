@@ -137,36 +137,53 @@
 
 .grayButton {
   background-color: #CECCCC;
-  /* Green */
   opacity: .7;
   border: none;
-  color: white;
+  border-radius: 15px 15px 0px 0px;
+  color: black;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif; }
+
+.grayButton:hover {
+  background-color: #7F7F7F; }
 
 .completed {
   background-color: #4CAF50;
   /* Green */
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif; }
+
+.completed:hover {
+  background-color: #4CAF50; }
 
 .current {
   background-color: #1C75BB;
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -174,17 +191,27 @@
   width: 33.3%;
   font-family: 'Lato', sans-serif; }
 
+.current:hover {
+  background-color: #1C75BB; }
+
 .future {
   background-color: #F05A29;
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif; }
+
+.future:hover {
+  background-color: #F05A29; }
 
 .popPic {
   max-width: 100px;
