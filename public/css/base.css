@@ -153,7 +153,8 @@
   font-family: 'Lato', sans-serif; }
 
 .grayButton:hover {
-  background-color: #7F7F7F; }
+  background-color: #7F7F7F;
+  cursor: pointer; }
 
 .completed {
   background-color: #4CAF50;
@@ -173,7 +174,8 @@
   font-family: 'Lato', sans-serif; }
 
 .completed:hover {
-  background-color: #4CAF50; }
+  background-color: #4CAF50;
+  cursor: pointer; }
 
 .current {
   background-color: #1C75BB;
@@ -192,7 +194,8 @@
   font-family: 'Lato', sans-serif; }
 
 .current:hover {
-  background-color: #1C75BB; }
+  background-color: #1C75BB;
+  cursor: pointer; }
 
 .future {
   background-color: #F05A29;
@@ -211,7 +214,8 @@
   font-family: 'Lato', sans-serif; }
 
 .future:hover {
-  background-color: #F05A29; }
+  background-color: #F05A29;
+  cursor: pointer; }
 
 .popPic {
   max-width: 100px;

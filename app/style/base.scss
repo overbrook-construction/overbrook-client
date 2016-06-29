@@ -181,6 +181,7 @@
 
 .grayButton:hover {
   background-color: #7F7F7F;
+  cursor: pointer;
 }
 
 .completed {
@@ -202,6 +203,7 @@
 
  .completed:hover {
    background-color: #4CAF50;
+   cursor: pointer;
  }
 
 .current {
@@ -223,6 +225,7 @@
 
 .current:hover {
   background-color: #1C75BB;
+  cursor: pointer;
 }
 
 .future {
@@ -244,6 +247,7 @@
 
 .future:hover {
   background-color: #F05A29;
+  cursor: pointer;
 }
 
 .popPic {
