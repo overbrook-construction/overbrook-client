@@ -162,59 +162,92 @@
 
 // STYLING FOR THE DARKENED FILTER BUTTONS ON MAP AND GALLERY
 .grayButton {
-  background-color: #CECCCC; /* Green */
+  background-color: #CECCCC;
   opacity: .7;
   border: none;
-  color: white;
+  border-radius: 15px 15px 0px 0px;
+  color: black;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif;
+}
+
+.grayButton:hover {
+  background-color: #7F7F7F;
+  cursor: pointer;
 }
 
 .completed {
   background-color: #4CAF50; /* Green */
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif;
-  // margin: 0px 5px 0px 0px;
 }
+
+ .completed:hover {
+   background-color: #4CAF50;
+   cursor: pointer;
+ }
 
 .current {
   background-color: #1C75BB;
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif;
-  // margin: 0px 5px 0px 5px;
+}
+
+.current:hover {
+  background-color: #1C75BB;
+  cursor: pointer;
 }
 
 .future {
   background-color: #F05A29;
   border: none;
+  border-radius: 15px 15px 0px 0px;
   color: white;
   padding: 10px;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-top: 4px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 2vmin;
   width: 33.3%;
   font-family: 'Lato', sans-serif;
-  // margin: 0px 0px 0px 5px;
+}
+
+.future:hover {
+  background-color: #F05A29;
+  cursor: pointer;
 }
 
 .popPic {
