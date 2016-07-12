@@ -93,6 +93,7 @@ angular.module('MapModule', ['AjaxService'])
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
   var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
     var geoArray = [];
+    var count = 0;
     var promiseArray = objectArray.map(function(value, index) {
       var geocoder = new google.maps.Geocoder();
 
@@ -102,7 +103,6 @@ angular.module('MapModule', ['AjaxService'])
           if(status === google.maps.GeocoderStatus.OK) {
             resolve(results[0].geometry.location);
           }
-
         })
 
       })

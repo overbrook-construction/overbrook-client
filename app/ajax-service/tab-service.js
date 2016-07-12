@@ -1,15 +1,5 @@
 'use strict';
 
-// var tabService = angular.module('TabService', []);
-//
-// tabService.factory('tab', [function() {
-//   var passedTab = {
-//     tab = 'sam'
-//   };
-//   return passedTab;
-// }]);
-
-
 var tabService = angular.module('TabService', []);
 
 /*

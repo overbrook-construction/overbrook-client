@@ -31339,16 +31339,6 @@
 
 	'use strict';
 
-	// var tabService = angular.module('TabService', []);
-	//
-	// tabService.factory('tab', [function() {
-	//   var passedTab = {
-	//     tab = 'sam'
-	//   };
-	//   return passedTab;
-	// }]);
-
-
 	var tabService = angular.module('TabService', []);
 
 	/*
@@ -31511,6 +31501,7 @@
 	  //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
 	  var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
 	    var geoArray = [];
+	    var count = 0;
 	    var promiseArray = objectArray.map(function(value, index) {
 	      var geocoder = new google.maps.Geocoder();
 
@@ -31520,7 +31511,6 @@
 	          if(status === google.maps.GeocoderStatus.OK) {
 	            resolve(results[0].geometry.location);
 	          }
-
 	        })
 
 	      })
