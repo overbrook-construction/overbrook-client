@@ -83,7 +83,6 @@ angular.module('MapModule', ['AjaxService'])
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
   var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
     var geoArray = [];
-
     var promiseArray = objectArray.map(function(value, index) {
       var geocoder = new google.maps.Geocoder();
 
@@ -91,6 +90,7 @@ angular.module('MapModule', ['AjaxService'])
 
         geocoder.geocode({'address': value.address}, function(results, status) {
           if(status === google.maps.GeocoderStatus.OK) {
+            console.log('RESULTS IN GEOCODER', results[0].geometry.location, results[0]);
             resolve(results[0].geometry.location);
           }
 
@@ -100,7 +100,6 @@ angular.module('MapModule', ['AjaxService'])
     })
     Promise.all(promiseArray)
     .then(function(result) {
-
       if (clickedValue == 'Complete') {
         completedGeoAddresses = result;
         geo.completedGeoAddresses = result;
@@ -120,6 +119,7 @@ angular.module('MapModule', ['AjaxService'])
       mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
     })
     .catch(function(error){
+      console.log('ERROR IN GEO LOCATING : ', error);
     })
   }
 
@@ -191,11 +191,11 @@ angular.module('MapModule', ['AjaxService'])
         vm.clickedAddress.push(obj);
       }
     }
-    if (clickedValue == 'Complete' && geo.completedGeoAddresses){
+    if (clickedValue == 'Complete' && geo.completedGeoAddresses.length){
       mapObject.clearMarkers();
       mapObject.drawMarkers(geo.completedGeoAddresses, iconValue, vm.clickedAddress)
     }
-    if (clickedValue == 'Constructing' && geo.constructingGeoAddresses){
+    if (clickedValue == 'Constructing' && geo.constructingGeoAddresses.length){
       mapObject.clearMarkers();
       mapObject.drawMarkers(geo.constructingGeoAddresses, iconValue, vm.clickedAddress)
     }
