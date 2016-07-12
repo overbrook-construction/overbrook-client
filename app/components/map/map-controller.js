@@ -90,7 +90,6 @@ angular.module('MapModule', ['AjaxService'])
 
         geocoder.geocode({'address': value.address}, function(results, status) {
           if(status === google.maps.GeocoderStatus.OK) {
-            console.log('RESULTS IN GEOCODER', results[0].geometry.location, results[0]);
             resolve(results[0].geometry.location);
           }
 
@@ -119,7 +118,7 @@ angular.module('MapModule', ['AjaxService'])
       mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
     })
     .catch(function(error){
-      console.log('ERROR IN GEO LOCATING : ', error);
+      throw error;
     })
   }
 

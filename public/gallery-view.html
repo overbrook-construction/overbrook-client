@@ -1,4 +1,6 @@
-<div class="galleryImg" ng-init="galleryCtrl.getData(); galleryCtrl.showSideCompleted('Complete'); galleryCtrl.changeButtonColor('Complete')">
+<!-- <div class="galleryImg" ng-init="galleryCtrl.getData(); galleryCtrl.showSideCompleted('Complete'); galleryCtrl.changeButtonColor('Complete')"> -->
+  <div class="galleryImg" ng-init="galleryCtrl.getData(); galleryCtrl.setTab(galleryCtrl.tab.tab, galleryCtrl.newTabState, galleryCtrl.changeButtonColor)">
+
   <nav-directive></nav-directive>
 
 <div class="galleryWrapper">
@@ -14,9 +16,10 @@
 <!-- Side bar -->
   <div class="addressSidebar">
     <div class="filterButtonDiv">
-      <button class="completed" id="completed" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Complete'); galleryCtrl.changeButtonColor('Complete')">Completed/ </br> Sold</button>
-      <button class="current" id="current" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Constructing'); galleryCtrl.changeButtonColor('current')">Under Construction</button>
-      <button class="future" id="future" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Future'); galleryCtrl.changeButtonColor('future')">Building Sites</button>
+      <button class="completed" id="completed" name="filterButton" type="button" ng-click="galleryCtrl.setTab('Complete', galleryCtrl.newTabState, galleryCtrl.changeButtonColor)">Completed/ </br> Sold</button>
+      <!-- <button class="current" id="current" name="filterButton" type="button" ng-click="galleryCtrl.showSideCompleted('Constructing'); galleryCtrl.changeButtonColor('current')">Under Construction</button> -->
+      <button class="current" id="current" name="filterButton" type="button" ng-click="galleryCtrl.setTab('Constructing', galleryCtrl.newTabState, galleryCtrl.changeButtonColor)">Under Construction</button>
+      <button class="future" id="future" name="filterButton" type="button" ng-click="galleryCtrl.setTab('Future', galleryCtrl.newTabState, galleryCtrl.changeButtonColor)">Building Sites</button>
     </div>
     <div class="scrollContainer">
       <div class="addressDiv" ng-repeat="(eachHome, value) in galleryCtrl.clickedAddress">

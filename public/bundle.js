@@ -49,16 +49,16 @@
 	const angular = __webpack_require__(1);
 
 	__webpack_require__(3);
-	__webpack_require__(8);
 	__webpack_require__(9);
 	__webpack_require__(10);
-	__webpack_require__(4);
 	__webpack_require__(11);
-	__webpack_require__(20);
-	__webpack_require__(21)
-	__webpack_require__(22);
-	__webpack_require__(24);
-	__webpack_require__(27);
+	__webpack_require__(4);
+	__webpack_require__(12);
+	__webpack_require__(21);
+	__webpack_require__(22)
+	__webpack_require__(23);
+	__webpack_require__(25);
+	__webpack_require__(28);
 
 
 /***/ },
@@ -31126,13 +31126,27 @@
 
 	__webpack_require__(5);
 	__webpack_require__(7);
+	__webpack_require__(8);
 
-	angular.module('GalleryModule', ['AjaxService', 'GeoService'])
-	  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', function($location, ajax, $window, geo) {
+	angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
+	  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', 'tab', function($location, ajax, $window, geo, tab) {
 
 	    var vm = this;
 	    vm.houseData;
 	    var data;
+
+	    vm.showInfo = false;
+	    vm.clickedHomePicArray = [];
+	    vm.clickedAddress = [];
+
+	    // WHEN THEY CLICK WE WANT SET TAB TO GO OFF AND SET THE CURRENT TAB AND PASS IN THE SHOW SIDE COMPLETED CALL BACK;
+	    vm.currentTab = tab.tab;
+	    vm.tab = tab;
+	    vm.setTab = tab.setTab;
+
+
+
+
 
 	    vm.reloadPage = function() {
 	      console.log('RELOAD HAS BEEN HIT');
@@ -31161,6 +31175,7 @@
 
 	// BUTTON CLICKING FUNCTIONALITY
 	    vm.changeButtonColor = function(buttonClicked) {
+	      console.log('CHANGE BUTTON COLOR HIT WITH : ', buttonClicked);
 	      var count = 0;
 	      setColor(buttonClicked);
 	    }
@@ -31169,6 +31184,12 @@
 	      if (buttonClicked === 'Complete') {
 	        var buttonClicked;
 	        buttonClicked = 'completed';
+	      }
+	      else if (buttonClicked === 'Constructing') {
+	        buttonClicked = 'current';
+	      }
+	      else if (buttonClicked === 'Future') {
+	        buttonClicked = 'future';
 	      }
 	      var completeButton = document.getElementsByName('filterButton');
 	      for (var i = 0; i < completeButton.length; i++) {
@@ -31180,13 +31201,6 @@
 	        }
 	      }
 	    }
-
-
-	  vm.showInfo = false;
-
-
-	  vm.clickedHomePicArray = [];
-	  vm.clickedAddress = [];
 
 	  vm.showSideCompleted = function(clickedValue){
 	    vm.clickedHomePicArray = [];
@@ -31200,7 +31214,16 @@
 	    }
 	  }
 
-
+	// ADDING BACK TAB FUNCTIONALITY
+	vm.newTabState = function(tabState) {
+	  console.log('TAB STATE : ', tabState);
+	  if (!tabState) {
+	    console.log('if block hit');
+	    tabState = 'Complete';
+	  }
+	  vm.showSideCompleted(tabState);
+	  vm.changeButtonColor(tabState);
+	};
 
 	  vm.changeStateFalse = function(){
 	    vm.showInfo = false;
@@ -31290,10 +31313,10 @@
 
 	
 	// PRODUCTION ROUTE >>>>>>>>>
-	exports.baseUrl = 'https://overbrook-server.herokuapp.com';
+	// exports.baseUrl = 'https://overbrook-server.herokuapp.com';
 
 	// STAGING ROUTE >>>>>>>>
-	// exports.baseUrl = 'http://localhost:3000'
+	exports.baseUrl = 'http://localhost:3000'
 
 
 /***/ },
@@ -31318,6 +31341,39 @@
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	// var tabService = angular.module('TabService', []);
+	//
+	// tabService.factory('tab', [function() {
+	//   var passedTab = {
+	//     tab = 'sam'
+	//   };
+	//   return passedTab;
+	// }]);
+
+
+	var tabService = angular.module('TabService', []);
+
+	tabService.factory('tab', [function () {
+	  var tabs = {
+	    tab: 'Complete',
+	    setTab: function(pickedTab, cb1, cb2) {
+	      console.log('SET TAB HAS BEEN HIT WITH : ', pickedTab, cb1, cb2);
+	      tabs.tab = pickedTab;
+	      cb1(tabs.tab);
+	      cb2(tabs.tab);
+	    }
+	  };
+
+	  return tabs;
+	}])
+
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31340,7 +31396,7 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31355,7 +31411,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31450,7 +31506,6 @@
 
 	        geocoder.geocode({'address': value.address}, function(results, status) {
 	          if(status === google.maps.GeocoderStatus.OK) {
-	            console.log('RESULTS IN GEOCODER', results[0].geometry.location, results[0]);
 	            resolve(results[0].geometry.location);
 	          }
 
@@ -31479,7 +31534,7 @@
 	      mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
 	    })
 	    .catch(function(error){
-	      console.log('ERROR IN GEO LOCATING : ', error);
+	      throw error;
 	    })
 	  }
 
@@ -31572,13 +31627,13 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	__webpack_require__(12);
-	var url = __webpack_require__(13);
+	__webpack_require__(13);
+	var url = __webpack_require__(14);
 	__webpack_require__(4);
 
 	angular.module('InfoModule', ['AjaxService', 'ngStorage'])
@@ -31701,7 +31756,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (root, factory) {
@@ -31928,7 +31983,7 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -31954,8 +32009,8 @@
 
 	'use strict';
 
-	var punycode = __webpack_require__(14);
-	var util = __webpack_require__(16);
+	var punycode = __webpack_require__(15);
+	var util = __webpack_require__(17);
 
 	exports.parse = urlParse;
 	exports.resolve = urlResolve;
@@ -32030,7 +32085,7 @@
 	      'gopher:': true,
 	      'file:': true
 	    },
-	    querystring = __webpack_require__(17);
+	    querystring = __webpack_require__(18);
 
 	function urlParse(url, parseQueryString, slashesDenoteHost) {
 	  if (url && util.isObject(url) && url instanceof Url) return url;
@@ -32666,7 +32721,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/*! https://mths.be/punycode v1.3.2 by @mathias */
@@ -33198,10 +33253,10 @@
 
 	}(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(15)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)(module), (function() { return this; }())))
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -33217,7 +33272,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33239,17 +33294,17 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	exports.decode = exports.parse = __webpack_require__(18);
-	exports.encode = exports.stringify = __webpack_require__(19);
+	exports.decode = exports.parse = __webpack_require__(19);
+	exports.encode = exports.stringify = __webpack_require__(20);
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33335,7 +33390,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -33405,7 +33460,7 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33440,7 +33495,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -33458,13 +33513,13 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var constants = __webpack_require__(6);
-	__webpack_require__(23);
+	__webpack_require__(24);
 
 	angular.module('AdminModule', [])
 	  .controller('AdminController', ['$http', '$parse', '$window', '$scope', function($http, $parse, $window, $scope) {
@@ -33566,7 +33621,7 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var constants = __webpack_require__(6);
@@ -33588,12 +33643,12 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	angular.module('RouteModule', [__webpack_require__(25)])
+	angular.module('RouteModule', [__webpack_require__(26)])
 	  .config(['$routeProvider', function(route) {
 	    route
 	      .when('/home', {
@@ -33637,15 +33692,15 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(26);
+	__webpack_require__(27);
 	module.exports = 'ngRoute';
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	/**
@@ -34683,7 +34738,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
