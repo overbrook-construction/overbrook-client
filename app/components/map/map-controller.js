@@ -5,12 +5,16 @@ require(__dirname + '/../gallery/gallery-controller');
 
 require(__dirname + '/../../ajax-service/data-service');
 require(__dirname + '/../../ajax-service/geo-service');
+require(__dirname + '/../../ajax-service/tab-service');
 
 
 angular.module('MapModule', ['AjaxService'])
-.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
+.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', 'tab', function($http, $location, ajax, $controller, $window, geo, tab) {
 
   var vm = this;
+
+  vm.tab = tab;
+  vm.setTab = tab.setTab;
 
   vm.reloadPage = function() {
     $window.location.reload();
@@ -63,6 +67,12 @@ angular.module('MapModule', ['AjaxService'])
     if (buttonClicked === 'Complete') {
       var buttonClicked;
       buttonClicked = 'completed';
+    }
+    else if (buttonClicked === 'Constructing') {
+      buttonClicked = 'current';
+    }
+    else if (buttonClicked === 'Future') {
+      buttonClicked = 'future';
     }
     var completeButton = document.getElementsByName('filterButton');
     for (var i = 0; i < completeButton.length; i++) {
@@ -179,6 +189,14 @@ angular.module('MapModule', ['AjaxService'])
       markers = [];
     }
   }
+
+  vm.newTabState = function(tabState, iconValue) {
+    if (!tabState) {
+      tabState = 'Complete';
+    }
+    vm.showSideCompleted(tabState, iconValue);
+    vm.changeButtonColor(tabState);
+  };
 
 // FIRST FUNCTION HIT THAT RUNS ALL MAP FUNCTIONALITY
   vm.showSideCompleted = function(clickedValue, iconValue){

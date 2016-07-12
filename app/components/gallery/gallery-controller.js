@@ -15,17 +15,15 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
     vm.clickedHomePicArray = [];
     vm.clickedAddress = [];
 
+    vm.completeIcon = './media/complete-home.png';
+    vm.constructionIcon = './media/construction-home.png';
+    vm.futureIcon = './media/future-home.png';
+
     // WHEN THEY CLICK WE WANT SET TAB TO GO OFF AND SET THE CURRENT TAB AND PASS IN THE SHOW SIDE COMPLETED CALL BACK;
-    vm.currentTab = tab.tab;
     vm.tab = tab;
     vm.setTab = tab.setTab;
 
-
-
-
-
     vm.reloadPage = function() {
-      console.log('RELOAD HAS BEEN HIT');
       $window.location.reload();
     }
 
@@ -41,7 +39,6 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
         data = yup
       }
       else {
-          console.log('ELSE BLOCK HIT');
           ajax.getData(function(){
             vm.reloadPage();
 
@@ -51,7 +48,6 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
 
 // BUTTON CLICKING FUNCTIONALITY
     vm.changeButtonColor = function(buttonClicked) {
-      console.log('CHANGE BUTTON COLOR HIT WITH : ', buttonClicked);
       var count = 0;
       setColor(buttonClicked);
     }
@@ -92,9 +88,7 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
 
 // ADDING BACK TAB FUNCTIONALITY
 vm.newTabState = function(tabState) {
-  console.log('TAB STATE : ', tabState);
   if (!tabState) {
-    console.log('if block hit');
     tabState = 'Complete';
   }
   vm.showSideCompleted(tabState);

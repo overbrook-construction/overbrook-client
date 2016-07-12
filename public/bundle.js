@@ -31139,17 +31139,15 @@
 	    vm.clickedHomePicArray = [];
 	    vm.clickedAddress = [];
 
+	    vm.completeIcon = './media/complete-home.png';
+	    vm.constructionIcon = './media/construction-home.png';
+	    vm.futureIcon = './media/future-home.png';
+
 	    // WHEN THEY CLICK WE WANT SET TAB TO GO OFF AND SET THE CURRENT TAB AND PASS IN THE SHOW SIDE COMPLETED CALL BACK;
-	    vm.currentTab = tab.tab;
 	    vm.tab = tab;
 	    vm.setTab = tab.setTab;
 
-
-
-
-
 	    vm.reloadPage = function() {
-	      console.log('RELOAD HAS BEEN HIT');
 	      $window.location.reload();
 	    }
 
@@ -31165,7 +31163,6 @@
 	        data = yup
 	      }
 	      else {
-	          console.log('ELSE BLOCK HIT');
 	          ajax.getData(function(){
 	            vm.reloadPage();
 
@@ -31175,7 +31172,6 @@
 
 	// BUTTON CLICKING FUNCTIONALITY
 	    vm.changeButtonColor = function(buttonClicked) {
-	      console.log('CHANGE BUTTON COLOR HIT WITH : ', buttonClicked);
 	      var count = 0;
 	      setColor(buttonClicked);
 	    }
@@ -31216,9 +31212,7 @@
 
 	// ADDING BACK TAB FUNCTIONALITY
 	vm.newTabState = function(tabState) {
-	  console.log('TAB STATE : ', tabState);
 	  if (!tabState) {
-	    console.log('if block hit');
 	    tabState = 'Complete';
 	  }
 	  vm.showSideCompleted(tabState);
@@ -31357,13 +31351,21 @@
 
 	var tabService = angular.module('TabService', []);
 
+	/*
+	  set tab is running 'show side completed' and 'change button color', with passed in values from the view.
+	*/
+
 	tabService.factory('tab', [function () {
 	  var tabs = {
 	    tab: 'Complete',
-	    setTab: function(pickedTab, cb1, cb2) {
-	      console.log('SET TAB HAS BEEN HIT WITH : ', pickedTab, cb1, cb2);
+	    currentIcon: './media/complete-home.png',
+	    changeIcon: function(iconValue) {
+	      tabs.currentIcon = iconValue;
+	    },
+	    setTab: function(pickedTab, cb1, cb2, iconValue) {
+	      tabs.changeIcon(iconValue);
 	      tabs.tab = pickedTab;
-	      cb1(tabs.tab);
+	      cb1(tabs.tab, iconValue);
 	      cb2(tabs.tab);
 	    }
 	  };
@@ -31421,12 +31423,16 @@
 
 	__webpack_require__(5);
 	__webpack_require__(7);
+	__webpack_require__(8);
 
 
 	angular.module('MapModule', ['AjaxService'])
-	.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
+	.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', 'tab', function($http, $location, ajax, $controller, $window, geo, tab) {
 
 	  var vm = this;
+
+	  vm.tab = tab;
+	  vm.setTab = tab.setTab;
 
 	  vm.reloadPage = function() {
 	    $window.location.reload();
@@ -31479,6 +31485,12 @@
 	    if (buttonClicked === 'Complete') {
 	      var buttonClicked;
 	      buttonClicked = 'completed';
+	    }
+	    else if (buttonClicked === 'Constructing') {
+	      buttonClicked = 'current';
+	    }
+	    else if (buttonClicked === 'Future') {
+	      buttonClicked = 'future';
 	    }
 	    var completeButton = document.getElementsByName('filterButton');
 	    for (var i = 0; i < completeButton.length; i++) {
@@ -31595,6 +31607,14 @@
 	      markers = [];
 	    }
 	  }
+
+	  vm.newTabState = function(tabState, iconValue) {
+	    if (!tabState) {
+	      tabState = 'Complete';
+	    }
+	    vm.showSideCompleted(tabState, iconValue);
+	    vm.changeButtonColor(tabState);
+	  };
 
 	// FIRST FUNCTION HIT THAT RUNS ALL MAP FUNCTIONALITY
 	  vm.showSideCompleted = function(clickedValue, iconValue){
