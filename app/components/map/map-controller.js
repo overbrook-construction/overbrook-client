@@ -5,12 +5,16 @@ require(__dirname + '/../gallery/gallery-controller');
 
 require(__dirname + '/../../ajax-service/data-service');
 require(__dirname + '/../../ajax-service/geo-service');
+require(__dirname + '/../../ajax-service/tab-service');
 
 
 angular.module('MapModule', ['AjaxService'])
-.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', function($http, $location, ajax, $controller, $window, geo) {
+.controller('MapController', ['$http', '$location', 'ajax', '$controller', '$window', 'geo', 'tab', function($http, $location, ajax, $controller, $window, geo, tab) {
 
   var vm = this;
+
+  vm.tab = tab;
+  vm.setTab = tab.setTab;
 
   vm.reloadPage = function() {
     $window.location.reload();
@@ -64,6 +68,12 @@ angular.module('MapModule', ['AjaxService'])
       var buttonClicked;
       buttonClicked = 'completed';
     }
+    else if (buttonClicked === 'Constructing') {
+      buttonClicked = 'current';
+    }
+    else if (buttonClicked === 'Future') {
+      buttonClicked = 'future';
+    }
     var completeButton = document.getElementsByName('filterButton');
     for (var i = 0; i < completeButton.length; i++) {
       if (completeButton[i].className !== buttonClicked) {
@@ -83,6 +93,7 @@ angular.module('MapModule', ['AjaxService'])
   //  GEO CODES THE ADDRESSES PASSED IN BY SIDE BAR FUNCTION BASED ON CLICKED VALUE
   var geoFunc = function(objectArray, iconValue, cb, clickedValue) {
     var geoArray = [];
+    var count = 0;
     var promiseArray = objectArray.map(function(value, index) {
       var geocoder = new google.maps.Geocoder();
 
@@ -90,10 +101,8 @@ angular.module('MapModule', ['AjaxService'])
 
         geocoder.geocode({'address': value.address}, function(results, status) {
           if(status === google.maps.GeocoderStatus.OK) {
-            console.log('RESULTS IN GEOCODER', results[0].geometry.location, results[0]);
             resolve(results[0].geometry.location);
           }
-
         })
 
       })
@@ -119,7 +128,7 @@ angular.module('MapModule', ['AjaxService'])
       mapObject.drawMarkers(result, iconValue, objectArray, clickedValue);
     })
     .catch(function(error){
-      console.log('ERROR IN GEO LOCATING : ', error);
+      throw error;
     })
   }
 
@@ -180,6 +189,14 @@ angular.module('MapModule', ['AjaxService'])
       markers = [];
     }
   }
+
+  vm.newTabState = function(tabState, iconValue) {
+    if (!tabState) {
+      tabState = 'Complete';
+    }
+    vm.showSideCompleted(tabState, iconValue);
+    vm.changeButtonColor(tabState);
+  };
 
 // FIRST FUNCTION HIT THAT RUNS ALL MAP FUNCTIONALITY
   vm.showSideCompleted = function(clickedValue, iconValue){
