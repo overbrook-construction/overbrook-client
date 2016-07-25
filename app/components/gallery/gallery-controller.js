@@ -2,16 +2,28 @@
 
 require(__dirname + '/../../ajax-service/data-service');
 require(__dirname + '/../../ajax-service/geo-service');
+require(__dirname + '/../../ajax-service/tab-service');
 
-angular.module('GalleryModule', ['AjaxService', 'GeoService'])
-  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', function($location, ajax, $window, geo) {
+angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
+  .controller('GalleryController', ['$location', 'ajax', '$window', 'geo', 'tab', function($location, ajax, $window, geo, tab) {
 
     var vm = this;
     vm.houseData;
     var data;
 
+    vm.showInfo = false;
+    vm.clickedHomePicArray = [];
+    vm.clickedAddress = [];
+
+    vm.completeIcon = './media/complete-home.png';
+    vm.constructionIcon = './media/construction-home.png';
+    vm.futureIcon = './media/future-home.png';
+
+    // WHEN THEY CLICK WE WANT SET TAB TO GO OFF AND SET THE CURRENT TAB AND PASS IN THE SHOW SIDE COMPLETED CALL BACK;
+    vm.tab = tab;
+    vm.setTab = tab.setTab;
+
     vm.reloadPage = function() {
-      console.log('RELOAD HAS BEEN HIT');
       $window.location.reload();
     }
 
@@ -27,7 +39,6 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
         data = yup
       }
       else {
-          console.log('ELSE BLOCK HIT');
           ajax.getData(function(){
             vm.reloadPage();
 
@@ -46,6 +57,12 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
         var buttonClicked;
         buttonClicked = 'completed';
       }
+      else if (buttonClicked === 'Constructing') {
+        buttonClicked = 'current';
+      }
+      else if (buttonClicked === 'Future') {
+        buttonClicked = 'future';
+      }
       var completeButton = document.getElementsByName('filterButton');
       for (var i = 0; i < completeButton.length; i++) {
         if (completeButton[i].className !== buttonClicked) {
@@ -56,13 +73,6 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
         }
       }
     }
-
-
-  vm.showInfo = false;
-
-
-  vm.clickedHomePicArray = [];
-  vm.clickedAddress = [];
 
   vm.showSideCompleted = function(clickedValue){
     vm.clickedHomePicArray = [];
@@ -76,7 +86,14 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService'])
     }
   }
 
-
+// ADDING BACK TAB FUNCTIONALITY
+vm.newTabState = function(tabState) {
+  if (!tabState) {
+    tabState = 'Complete';
+  }
+  vm.showSideCompleted(tabState);
+  vm.changeButtonColor(tabState);
+};
 
   vm.changeStateFalse = function(){
     vm.showInfo = false;
