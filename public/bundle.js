@@ -31160,6 +31160,7 @@
 	    vm.getData = function() {
 	      if ($window.localStorage.getItem('allHomeData')) {
 	        var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+
 	        data = yup
 	      }
 	      else {
@@ -31198,16 +31199,17 @@
 	      }
 	    }
 
-	  vm.showSideCompleted = function(clickedValue){
-	    vm.clickedHomePicArray = [];
-	    vm.clickedAddress = [];
-	    for (var key in data) {
-	      var obj = data[key];
-	      if(obj.status === clickedValue) {
-	        vm.clickedHomePicArray.push(obj);
-	        vm.clickedAddress.push(obj);
+	    vm.showSideCompleted = function(clickedValue){
+	      vm.clickedHomePicArray = [];
+	      vm.clickedAddress = [];
+
+	      for (var key in data) {
+	        var obj = data[key];
+	        if(obj.status === clickedValue) {
+	          vm.clickedHomePicArray.push(obj);
+	          vm.clickedAddress.push(obj);
+	        }
 	      }
-	    }
 	  }
 
 	// ADDING BACK TAB FUNCTIONALITY
@@ -31242,7 +31244,6 @@
 	      for (var key in data) {
 	        var obj = data[key]
 	        if (data[key]._id == id) {
-	          // console.log('THIS IS THE MATCHING OBJECT', obj);
 	          vm.singleHomeData.address = obj.address;
 	          vm.singleHomeData.sqft = obj.sqft;
 	          vm.singleHomeData.bedrooms = obj.bedrooms;
@@ -31288,11 +31289,17 @@
 	    $http.get(adminRoute)
 	    .then(function successCallback(response) {
 	      obj.allHomeData = response.data;
+
+	      for (var i = 0; i < obj.allHomeData.length; i++) {
+	        if (obj.allHomeData[i]._id === "58be64f38359750400f02164") {
+	          var houseToMove = obj.allHomeData.splice(i, 1)[0]
+	          obj.allHomeData.unshift(houseToMove)
+	        }
+	      }
+
 	      $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
 	      cb();
-
 	    }, function errorCallback(err) {
-	        console.error(err);
 	    })
 	  }
 
@@ -31382,6 +31389,7 @@
 	  resetToken();
 
 	  this.getData = function() {
+	    console.log('GETTING DATA VIA AJAX');
 	    ajax.getData(function(){});
 	  }
 	}])

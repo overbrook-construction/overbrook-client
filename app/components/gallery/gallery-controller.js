@@ -36,6 +36,7 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
     vm.getData = function() {
       if ($window.localStorage.getItem('allHomeData')) {
         var yup = JSON.parse($window.localStorage.getItem('allHomeData'));
+
         data = yup
       }
       else {
@@ -74,16 +75,17 @@ angular.module('GalleryModule', ['AjaxService', 'GeoService', 'TabService'])
       }
     }
 
-  vm.showSideCompleted = function(clickedValue){
-    vm.clickedHomePicArray = [];
-    vm.clickedAddress = [];
-    for (var key in data) {
-      var obj = data[key];
-      if(obj.status === clickedValue) {
-        vm.clickedHomePicArray.push(obj);
-        vm.clickedAddress.push(obj);
+    vm.showSideCompleted = function(clickedValue){
+      vm.clickedHomePicArray = [];
+      vm.clickedAddress = [];
+
+      for (var key in data) {
+        var obj = data[key];
+        if(obj.status === clickedValue) {
+          vm.clickedHomePicArray.push(obj);
+          vm.clickedAddress.push(obj);
+        }
       }
-    }
   }
 
 // ADDING BACK TAB FUNCTIONALITY
@@ -118,7 +120,6 @@ vm.newTabState = function(tabState) {
       for (var key in data) {
         var obj = data[key]
         if (data[key]._id == id) {
-          // console.log('THIS IS THE MATCHING OBJECT', obj);
           vm.singleHomeData.address = obj.address;
           vm.singleHomeData.sqft = obj.sqft;
           vm.singleHomeData.bedrooms = obj.bedrooms;

@@ -12,6 +12,7 @@ angular.module('HomeModule', ['AjaxService'])
   resetToken();
 
   this.getData = function() {
+    console.log('GETTING DATA VIA AJAX');
     ajax.getData(function(){});
   }
 }])
