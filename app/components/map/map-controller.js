@@ -49,8 +49,8 @@ angular.module('MapModule', ['AjaxService'])
   vm.initMap = function() {
     map.mapDiv = document.getElementById('map');
     map.googleMap = new google.maps.Map(map.mapDiv, {
-      center: {lat: 47.629, lng: -122.211},
-      zoom: 18,
+      center: {lat: 47.622, lng: -122.211},
+      zoom: 14,
     });
   }
 
