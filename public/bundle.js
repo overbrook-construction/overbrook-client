@@ -31466,7 +31466,7 @@
 	    map.mapDiv = document.getElementById('map');
 	    map.googleMap = new google.maps.Map(map.mapDiv, {
 	      center: {lat: 47.629, lng: -122.211},
-	      zoom: 12
+	      zoom: 18,
 	    });
 	  }
 
@@ -31710,11 +31710,11 @@
 	          this.singleHomeData.address = obj.address;
 	          this.singleHomeData.beginDate = obj.beginDate;
 	          frontPicture.push(obj.pics[0]);
-	          if (obj.lotSize == null) {
-	            this.singleHomeData.lotSize = nA;
+	          if (obj.lotsize == null) {
+	            this.singleHomeData.lotsize = nA;
 	          }
 	          else {
-	            this.singleHomeData.lotSize = obj.lotSize;
+	            this.singleHomeData.lotsize = obj.lotsize;
 	          }
 	        }
 
@@ -31746,11 +31746,11 @@
 	            this.singleHomeData.baths = obj.baths;
 	          }
 
-	          if (obj.lotSize == null || undefined) {
-	            this.singleHomeData.lotSize = nA;
+	          if (obj.lotsize == null || undefined) {
+	            this.singleHomeData.lotsize = nA;
 	          }
 	          else {
-	            this.singleHomeData.lotSize = obj.lotSize;
+	            this.singleHomeData.lotsize = obj.lotsize;
 	          }
 
 	          this.singleHomeData.schooldistrict = obj.schooldistrict;

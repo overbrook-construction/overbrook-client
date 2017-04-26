@@ -60,11 +60,11 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
           this.singleHomeData.address = obj.address;
           this.singleHomeData.beginDate = obj.beginDate;
           frontPicture.push(obj.pics[0]);
-          if (obj.lotSize == null) {
-            this.singleHomeData.lotSize = nA;
+          if (obj.lotsize == null) {
+            this.singleHomeData.lotsize = nA;
           }
           else {
-            this.singleHomeData.lotSize = obj.lotSize;
+            this.singleHomeData.lotsize = obj.lotsize;
           }
         }
 
@@ -96,11 +96,11 @@ angular.module('InfoModule', ['AjaxService', 'ngStorage'])
             this.singleHomeData.baths = obj.baths;
           }
 
-          if (obj.lotSize == null || undefined) {
-            this.singleHomeData.lotSize = nA;
+          if (obj.lotsize == null || undefined) {
+            this.singleHomeData.lotsize = nA;
           }
           else {
-            this.singleHomeData.lotSize = obj.lotSize;
+            this.singleHomeData.lotsize = obj.lotsize;
           }
 
           this.singleHomeData.schooldistrict = obj.schooldistrict;
