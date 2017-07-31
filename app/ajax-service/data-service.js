@@ -28,6 +28,13 @@ ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
         }
       }
 
+      for (var i = 0; i < obj.allHomeData.length; i++) {
+        if (obj.allHomeData[i]._id === "58be64f38359750400f02164") {
+          var houseToMove = obj.allHomeData.splice(i, 2)[0]
+          obj.allHomeData.unshift(houseToMove)
+        }
+      }
+
       $window.localStorage.setItem('allHomeData', JSON.stringify(obj.allHomeData));
       cb();
     }, function errorCallback(err) {
