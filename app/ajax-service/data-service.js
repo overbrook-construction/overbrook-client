@@ -22,7 +22,7 @@ ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
       obj.allHomeData = response.data;
 
       for (var i = 0; i < obj.allHomeData.length; i++) {
-        if (obj.allHomeData[i]._id === "58be64f38359750400f02164") {
+        if (obj.allHomeData[i]._id === "58be58bbd914590400de7e23") {
           var houseToMove = obj.allHomeData.splice(i, 1)[0]
           obj.allHomeData.unshift(houseToMove)
         }
