@@ -33,7 +33,7 @@ ajaxService.factory('ajax', ['$http', '$window', function($http, $window) {
       }
 
       for (var i = 0; i < obj.allHomeData.length; i++) {
-        if (obj.allHomeData[i]._id === "58be58bbd914590400de7e23") {
+        if (obj.allHomeData[i]._id === "58be58edd914590400de7e24") {
           var houseToMove2 = obj.allHomeData.splice(i, 1)[0]
           obj.allHomeData.unshift(houseToMove2)
         }
