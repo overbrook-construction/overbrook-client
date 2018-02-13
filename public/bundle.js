@@ -31294,7 +31294,7 @@
 	      obj2.allHomeData2 = response.data;
 
 	      for (var i = 0; i < obj2.allHomeData2.length; i++) {
-	        if (obj2.allHomeData2[i]._id === "58be64f38359750400f02164") {
+	        if (obj2.allHomeData2[i]._id === "58be58edd914590400de7e24") {
 	          var houseToMove = obj2.allHomeData2.splice(i, 1)[0]
 	          obj2.allHomeData2.unshift(houseToMove)
 	          obj.allHomeData = obj2.allHomeData2;
@@ -31302,7 +31302,7 @@
 	      }
 
 	      for (var i = 0; i < obj.allHomeData.length; i++) {
-	        if (obj.allHomeData[i]._id === "58be58edd914590400de7e24") {
+	        if (obj.allHomeData[i]._id === "58be591dd914590400de7e25") {
 	          var houseToMove2 = obj.allHomeData.splice(i, 1)[0]
 	          obj.allHomeData.unshift(houseToMove2)
 	        }
